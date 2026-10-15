@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hòm Thư Lời Nhắn & Góp Ý · Study Hub Admin</title>
+  <meta name="description" content="Trang quản trị xem danh sách ý kiến đóng góp và lời nhắn gửi đến Huyền Trân trên Study Hub.">
+  <link rel="icon" href="./app-icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root {
+      --bg-base: #fbf9f5;
+      --bg-card: rgba(255, 255, 255, 0.92);
+      --border: rgba(0, 0, 0, 0.08);
+      --text-main: #1e293b;
+      --text-sub: #64748b;
+      --accent: #6366f1;
+      --accent-soft: #eef2ff;
+      --font-body: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      --font-title: 'Lexend', -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.05) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(244, 63, 94, 0.05) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(14, 165, 233, 0.05) 0px, transparent 50%);
+    }
+
+    /* Ambient background glowing orbs */
+    .ambient-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.6;
+    }
+    .orb-1 { width: 380px; height: 380px; background: rgba(99, 102, 241, 0.15); top: -100px; left: -100px; }
+    .orb-2 { width: 350px; height: 350px; background: rgba(236, 72, 153, 0.12); top: 30%; right: -120px; }
+
+    .admin-container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 20px 80px;
+      flex: 1;
+    }
+
+    /* NAV BAR */
+    .admin-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 14px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      transition: all 0.2s;
+    }
+    .back-btn:hover {
+      background: var(--accent-soft);
+      border-color: rgba(99, 102, 241, 0.3);
+      color: var(--accent);
+      transform: translateX(-2px);
+    }
+
+    .badge-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      color: #059669;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 20px;
+    }
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      background: #10b981;
+      border-radius: 50%;
+      animation: pulseDot 2s infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    /* HEADER BANNER */
+    .admin-header {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 24px 28px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .admin-title {
+      font-family: var(--font-title);
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .admin-subtitle {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-top: 4px;
+      line-height: 1.5;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--text-main);
+      transition: all 0.2s;
+    }
+    .btn-action:hover {
+      background: var(--accent-soft);
+      border-color: rgba(99, 102, 241, 0.3);
+      color: var(--accent);
+    }
+    .btn-action.btn-danger:hover {
+      background: #fff1f2;
+      border-color: #fecdd3;
+      color: #e11d48;
+    }
+
+    /* STATS ROW */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .stat-chip {
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(0,0,0,0.05);
+      border-radius: 16px;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+    }
+    .stat-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-sub);
+    }
+    .stat-val {
+      font-family: var(--font-title);
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-top: 2px;
+    }
+
+    /* SEARCH BAR */
+    .search-box {
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .search-input {
+      width: 100%;
+      padding: 12px 16px 12px 42px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      font-size: 13px;
+      font-family: inherit;
+      color: var(--text-main);
+      outline: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      transition: all 0.2s;
+    }
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+    .search-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 15px;
+      color: var(--text-sub);
+      pointer-events: none;
+    }
+
+    /* FEEDBACK LIST */
+    .feedback-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .feedback-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.02);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .feedback-card:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      border-color: rgba(99, 102, 241, 0.25);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .sender-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sender-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2);
+    }
+
+    .sender-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+    .send-date {
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-top: 1px;
+    }
+
+    .card-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-sm-action {
+      background: rgba(0,0,0,0.03);
+      border: none;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-sub);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-sm-action:hover {
+      background: rgba(0,0,0,0.08);
+      color: var(--text-main);
+    }
+    .btn-sm-danger:hover {
+      background: #ffe4e6;
+      color: #e11d48;
+    }
+
+    .card-body {
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: #334155;
+      background: rgba(248, 250, 252, 0.8);
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(0,0,0,0.04);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* EMPTY STATE */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      background: var(--bg-card);
+      border-radius: 24px;
+      border: 1px dashed rgba(0,0,0,0.12);
+    }
+    .empty-icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+      display: block;
+    }
+    .empty-title {
+      font-family: var(--font-title);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .empty-sub {
+      font-size: 12px;
+      color: var(--text-sub);
+      margin-top: 4px;
+    }
+
+    /* PIN OVERLAY */
+    .pin-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(251, 249, 245, 0.95);
+      backdrop-filter: blur(16px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .pin-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 36px 32px;
+      max-width: 380px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 50px -15px rgba(0,0,0,0.1);
+    }
+    .pin-icon {
+      font-size: 42px;
+      margin-bottom: 14px;
+      display: inline-block;
+    }
+    .pin-title {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+    .pin-desc {
+      font-size: 12.5px;
+      color: var(--text-sub);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+    .pin-input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1.5px solid var(--border);
+      text-align: center;
+      font-size: 20px;
+      font-family: inherit;
+      letter-spacing: 8px;
+      font-weight: 800;
+      outline: none;
+      margin-bottom: 14px;
+      transition: all 0.2s;
+    }
+    .pin-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+    .pin-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      border: none;
+      background: var(--text-main);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .pin-btn:hover {
+      background: var(--accent);
+    }
+    .pin-err {
+      color: #e11d48;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 10px;
+      display: none;
+    }
+
+    /* TOAST */
+    .toast-box {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 110;
+      padding: 12px 20px;
+      background: #1e293b;
+      color: #ffffff;
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.25s ease;
+      pointer-events: none;
+    }
+    .toast-box.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient background glow lights -->
+  <div class="ambient-orb orb-1"></div>
+  <div class="ambient-orb orb-2"></div>
+
+  <!-- PIN LOCK OVERLAY -->
+  <div class="pin-overlay" id="pinOverlay">
+    <div class="pin-card">
+      <span class="pin-icon">🔐</span>
+      <h2 class="pin-title">Xác thực Admin</h2>
+      <p class="pin-desc">Hòm thư riêng tư của Huyền Trân.<br>Vui lòng nhập mã PIN để tiếp tục.</p>
+      <input type="password" class="pin-input" id="pinInput" placeholder="••••" maxlength="6" autofocus onkeydown="if(event.key==='Enter') verifyPin()">
+      <button type="button" class="pin-btn" onclick="verifyPin()">Mở khóa hòm thư</button>
+      <p class="pin-err" id="pinError">Mã PIN không đúng, vui lòng thử lại!</p>
+      <div style="margin-top: 16px;">
+        <a href="./" style="font-size: 12px; color: var(--text-sub); text-decoration: none;">← Quay lại Study Hub</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN ADMIN APP -->
+  <div class="admin-container" id="adminApp" style="display: none;">
+    <!-- TOP NAV -->
+    <nav class="admin-nav">
+      <a href="./" class="back-btn">
+        <span>←</span>
+        <span>Về Study Hub</span>
+      </a>
+      <div class="badge-live">
+        <span class="live-dot"></span>
+        <span>Supabase DB Connected</span>
+      </div>
+    </nav>
+
+    <!-- HEADER BANNER -->
+    <header class="admin-header">
+      <div class="header-top">
+        <div>
+          <h1 class="admin-title">
+            <span>💌 Hòm Thư & Lời Nhắn</span>
+          </h1>
+          <p class="admin-subtitle">
+            Tổng hợp ý kiến đóng góp, lời nhắn và ý tưởng gửi đến từ người dùng Study Hub.
+          </p>
+        </div>
+        <div class="header-actions">
+          <button type="button" class="btn-action" onclick="fetchFeedbacks()" id="refreshBtn">
+            <span>🔄</span>
+            <span>Làm mới</span>
+          </button>
+          <button type="button" class="btn-action btn-danger" onclick="logoutAdmin()">
+            <span>🚪</span>
+            <span>Khóa lại</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- STATS -->
+      <div class="stats-row">
+        <div class="stat-chip">
+          <span class="stat-label">Tổng lời nhắn</span>
+          <span class="stat-val" id="totalCount">0</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-label">Lời nhắn hôm nay</span>
+          <span class="stat-val" style="color: #6366f1;" id="todayCount">0</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-label">Người gửi ẩn danh</span>
+          <span class="stat-val" style="color: #059669;" id="anonCount">0</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- SEARCH BAR -->
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" id="searchInput" placeholder="Tìm kiếm nội dung lời nhắn, tên người gửi..." oninput="handleSearch()">
+    </div>
+
+    <!-- FEEDBACK CARDS LIST -->
+    <main class="feedback-feed" id="feedbackFeed">
+      <div class="empty-state">
+        <span class="empty-icon">⏳</span>
+        <h3 class="empty-title">Đang nạp dữ liệu từ Cloud...</h3>
+        <p class="empty-sub">Vui lòng đợi giây lát</p>
+      </div>
+    </main>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast-box" id="toastBox">Đã sao chép!</div>
+
+  <script>
+    const SUPABASE_URL = 'https://cfiifhfruyjcgikjotne.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_DD6l7mKVEkHXIEG-1r7KDg_CbrfVdWA';
+    const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+    const DEFAULT_PIN = '1306'; // PIN mặc định cho Huyền Trân
+    let allFeedbacks = [];
+
+    // --- PIN AUTHENTICATION ---
+    function checkAuth() {
+      const savedPin = sessionStorage.getItem('hub_admin_pin');
+      if (savedPin === DEFAULT_PIN) {
+        document.getElementById('pinOverlay').style.display = 'none';
+        document.getElementById('adminApp').style.display = 'block';
+        fetchFeedbacks();
+      } else {
+        document.getElementById('pinOverlay').style.display = 'flex';
+        document.getElementById('adminApp').style.display = 'none';
+        setTimeout(() => document.getElementById('pinInput').focus(), 100);
+      }
+    }
+
+    function verifyPin() {
+      const input = document.getElementById('pinInput');
+      const error = document.getElementById('pinError');
+      if (input.value.trim() === DEFAULT_PIN) {
+        sessionStorage.setItem('hub_admin_pin', DEFAULT_PIN);
+        error.style.display = 'none';
+        document.getElementById('pinOverlay').style.display = 'none';
+        document.getElementById('adminApp').style.display = 'block';
+        fetchFeedbacks();
+      } else {
+        error.style.display = 'block';
+        input.value = '';
+        input.focus();
+      }
+    }
+
+    function logoutAdmin() {
+      sessionStorage.removeItem('hub_admin_pin');
+      checkAuth();
+    }
+
+    // --- DATA FETCHING ---
+    async function fetchFeedbacks() {
+      const feed = document.getElementById('feedbackFeed');
+      const refreshBtn = document.getElementById('refreshBtn');
+      if (refreshBtn) refreshBtn.classList.add('loading');
+
+      try {
+        if (!supabaseClient) throw new Error('Supabase client chưa sẵn sàng.');
+
+        const { data, error } = await supabaseClient
+          .from('travel_entries')
+          .select('*')
+          .eq('trip_id', 'STUDY_HUB_FEEDBACK')
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        allFeedbacks = data || [];
+        renderFeedbacks(allFeedbacks);
+        updateStats(allFeedbacks);
+      } catch (err) {
+        console.error('Lỗi nạp tin nhắn:', err);
+        feed.innerHTML = `
+          <div class="empty-state">
+            <span class="empty-icon">⚠️</span>
+            <h3 class="empty-title">Không thể tải dữ liệu</h3>
+            <p class="empty-sub">${err.message || 'Lỗi kết nối'}</p>
+          </div>
+        `;
+      } finally {
+        if (refreshBtn) refreshBtn.classList.remove('loading');
+      }
+    }
+
+    function updateStats(items) {
+      document.getElementById('totalCount').textContent = items.length;
+
+      const todayStr = new Date().toISOString().split('T')[0];
+      const todayCount = items.filter(it => it.date === todayStr).length;
+      document.getElementById('todayCount').textContent = todayCount;
+
+      const anonCount = items.filter(it => !it.participants || it.participants.toLowerCase().includes('ẩn danh')).length;
+      document.getElementById('anonCount').textContent = anonCount;
+    }
+
+    function renderFeedbacks(items) {
+      const feed = document.getElementById('feedbackFeed');
+
+      if (!items || items.length === 0) {
+        feed.innerHTML = `
+          <div class="empty-state">
+            <span class="empty-icon">🌱</span>
+            <h3 class="empty-title">Hòm thư chưa có tin nhắn nào</h3>
+            <p class="empty-sub">Khi người dùng gửi góp ý từ widget góc phải màn hình, lời nhắn sẽ xuất hiện tại đây.</p>
+          </div>
+        `;
+        return;
+      }
+
+      feed.innerHTML = items.map(item => {
+        const sender = item.participants || 'Ẩn danh';
+        const initial = sender.trim().charAt(0).toUpperCase() || 'A';
+        const dateFormatted = formatVNTime(item.created_at || item.date);
+
+        return `
+          <div class="feedback-card" id="card-${item.id}">
+            <div class="card-top">
+              <div class="sender-info">
+                <div class="sender-avatar">${initial}</div>
+                <div>
+                  <div class="sender-name">${escapeHtml(sender)}</div>
+                  <div class="send-date">${dateFormatted}</div>
+                </div>
+              </div>
+              <div class="card-actions">
+                <button type="button" class="btn-sm-action" onclick="copyContent(${JSON.stringify(item.content)})">
+                  📋 Sao chép
+                </button>
+                <button type="button" class="btn-sm-action btn-sm-danger" onclick="deleteFeedback('${item.id}')">
+                  🗑️ Xóa
+                </button>
+              </div>
+            </div>
+            <div class="card-body">${escapeHtml(item.content)}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function handleSearch() {
+      const q = document.getElementById('searchInput').value.trim().toLowerCase();
+      if (!q) {
+        renderFeedbacks(allFeedbacks);
+        return;
+      }
+      const filtered = allFeedbacks.filter(it => 
+        (it.content && it.content.toLowerCase().includes(q)) ||
+        (it.participants && it.participants.toLowerCase().includes(q))
+      );
+      renderFeedbacks(filtered);
+    }
+
+    async function deleteFeedback(id) {
+      if (!confirm('Bạn có chắc muốn xóa lời nhắn này khỏi hệ thống không?')) return;
+
+      try {
+        const { error } = await supabaseClient
+          .from('travel_entries')
+          .delete()
+          .eq('id', id);
+
+        if (error) throw error;
+
+        allFeedbacks = allFeedbacks.filter(it => it.id !== id);
+        renderFeedbacks(allFeedbacks);
+        updateStats(allFeedbacks);
+        showToast('Đã xóa lời nhắn thành công!');
+      } catch (err) {
+        alert('Lỗi khi xóa: ' + err.message);
+      }
+    }
+
+    function copyContent(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('Đã sao chép nội dung lời nhắn! 📋');
+      }).catch(() => {
+        showToast('Không thể sao chép');
+      });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toastBox');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    function formatVNTime(timestamp) {
+      if (!timestamp) return 'Gần đây';
+      try {
+        const d = new Date(timestamp);
+        return d.toLocaleDateString('vi-VN', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+      } catch {
+        return timestamp;
+      }
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Auto initialize auth on load
+    window.addEventListener('DOMContentLoaded', checkAuth);
+  </script>
+</body>
+</html>
