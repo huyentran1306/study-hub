@@ -102,7 +102,7 @@
       position: relative;
       z-index: 1;
       width: 100%;
-      max-width: 1240px;
+      max-width: 1380px;
       margin: 0 auto;
       padding: 48px 24px 100px;
       display: flex;
@@ -243,17 +243,11 @@
     /* CARD GRID */
     .sd-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 22px;
       margin-top: 10px;
     }
 
-    @media (max-width: 1120px) {
-      .sd-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 24px;
-      }
-    }
     @media (max-width: 640px) {
       .sd-grid {
         grid-template-columns: 1fr;
@@ -994,6 +988,58 @@
         </div>
       </a>
 
+      <!-- ===================================================================
+           CARD 5: TRAVEL EXPENSE SPLITTER (QUYẾT TOÁN DU LỊCH)
+           =================================================================== -->
+      <a class="sd-card" 
+         href="https://huyentran1306.github.io/Travel/" 
+         target="_blank"
+         style="--accent: #059669; --accent-bg: #ecfdf5;"
+         onclick="handleCardClick(event, 'https://huyentran1306.github.io/Travel/', 'Quyết Toán Du Lịch', 'Đang nạp Sổ tay quản lý quỹ & chia tiền du lịch công bằng...', '🌴', '#059669')">
+        
+        <div class="sd-card-stage">
+          <span class="sd-card-band"></span>
+          <span class="sd-card-shade"></span>
+          <span class="sd-card-grain"></span>
+
+          <!-- FLOATING TRAVEL FUNDS & PALM PARTICLES -->
+          <span class="sd-fx" aria-hidden="true">
+            <i style="--x: 12%; --s: 15px; --d: 6.8s; --delay: -0.6s; --sw: 16px;">🌴</i>
+            <i style="--x: 34%; --s: 14px; --d: 8.0s; --delay: -2.8s; --sw: -14px;">💸</i>
+            <i style="--x: 58%; --s: 13px; --d: 7.2s; --delay: -1.9s; --sw: 15px;">💰</i>
+            <i style="--x: 78%; --s: 16px; --d: 8.8s; --delay: -4.5s; --sw: -12px;">🏖️</i>
+            <i style="--x: 90%; --s: 13px; --d: 6.5s; --delay: -0.9s; --sw: 14px;">✦</i>
+          </span>
+
+          <div class="sd-stage-center">
+            <div class="sd-icon-badge">
+              <span>🌴</span>
+              <div class="sd-icon-glow"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sd-card-content">
+          <div class="sd-card-tag">
+            <span>Chi Tiêu Nhóm · Quyết Toán Quỹ · Du Lịch</span>
+          </div>
+          <div class="sd-card-name">
+            <span>Quyết Toán Du Lịch</span>
+            <span class="sd-card-arrow">→</span>
+          </div>
+          <p class="sd-card-desc">
+            Sổ thu chi & chia tiền du lịch công bằng: ghi nhận hóa đơn chi tiêu nhóm, tiếp tế quỹ đồng loạt, dự toán ngân sách và tính toán số dư từng thành viên.
+          </p>
+
+          <div class="sd-card-pills">
+            <span class="sd-pill">💸 Chia Tiền Công Bằng</span>
+            <span class="sd-pill">💰 Tiếp Tế Quỹ Nhanh</span>
+            <span class="sd-pill">📝 Dự Toán Chuyến Đi</span>
+          </div>
+        </div>
+      </a>
+
+
 
     </section>
 
@@ -1059,7 +1105,7 @@
     // 1. MASCOT TYPEWRITER ANIMATION
     const speechLines = [
       "Xin chào, mình là Huyền Trân! ✨",
-      "Hôm nay bạn muốn khám phá Portfolio, luyện tiếng Anh hay ôn chứng chỉ? 🌸",
+      "Hôm nay bạn muốn xem Portfolio, luyện tiếng Anh, ôn chứng chỉ hay lên lịch vi vu? 🌸",
       "Mỗi bước tiến nhỏ hôm nay đều đưa bạn đến gần hơn với phiên bản rực rỡ nhất! 🚀",
       "Không ngừng tích lũy tri thức, để tự do làm chủ công nghệ và tương lai! 💖"
     ];
