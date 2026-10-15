@@ -1053,7 +1053,7 @@
          href="https://study-en.vercel.app" 
          target="_blank"
          style="--accent: #4f46e5; --accent-bg: #eef2ff;"
-         onclick="handleCardClick(event, 'study-en', 'Study-En', 'Đang nạp Tech Lead Writing Co-pilot & Roleplay Arena...', '💻', '#4f46e5')">
+         onclick="handleCardClick(event, 'https://study-en.vercel.app', 'Study-En', 'Đang nạp Tech Lead Writing Co-pilot & Roleplay Arena...', '💻', '#4f46e5')">
         
         <div class="sd-card-stage">
           <span class="sd-card-band"></span>
@@ -1442,30 +1442,37 @@
 
     // 2. CARD CLICK & APP LOADER TRANSITION
     function handleCardClick(event, url, title, msg, emoji, accent) {
-      event.preventDefault();
+      if (event) event.preventDefault();
       
+      // Resolve exact target URL from parameter or anchor href
+      let targetUrl = url;
+      if (!targetUrl || !targetUrl.startsWith("http")) {
+        if (event && event.currentTarget && event.currentTarget.href && event.currentTarget.href.startsWith("http")) {
+          targetUrl = event.currentTarget.href;
+        } else if (targetUrl) {
+          targetUrl = `https://${targetUrl}`;
+        }
+      }
+
       const loader = document.getElementById("appLoader");
       const loaderCircle = document.getElementById("loaderCircle");
       const loaderEmoji = document.getElementById("loaderEmoji");
       const loaderTitle = document.getElementById("loaderTitle");
       const loaderMsg = document.getElementById("loaderMsg");
 
-      loader.style.setProperty("--loader-accent", accent);
-      loaderEmoji.textContent = emoji;
-      loaderTitle.textContent = `Đang mở ${title}...`;
-      loaderMsg.textContent = msg;
+      if (loader) {
+        loader.style.setProperty("--loader-accent", accent || "#4f46e5");
+        if (loaderEmoji) loaderEmoji.textContent = emoji || "✨";
+        if (loaderTitle) loaderTitle.textContent = `Đang mở ${title}...`;
+        if (loaderMsg) loaderMsg.textContent = msg || "Đợi một xíu nha! ♡";
+        loader.classList.add("active");
+      }
 
-      loader.classList.add("active");
-
-      // Smooth transition delay before actual navigation
+      // Smooth transition delay before opening
       setTimeout(() => {
-        if (url.startsWith("http")) {
-          window.open(url, "_blank");
-          loader.classList.remove("active");
-        } else {
-          window.location.href = url;
-        }
-      }, 700);
+        window.open(targetUrl, "_blank");
+        if (loader) loader.classList.remove("active");
+      }, 650);
     }
 
     // 3. FLOATING WIDGET TOGGLE & TABS
