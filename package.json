@@ -1,0 +1,12 @@
+{
+  "name": "study-hub",
+  "version": "1.0.0",
+  "description": "Study & AI Ecosystem Hub — Cổng kết nối các ứng dụng học tập và trợ lý AI của Huyền Trân",
+  "scripts": {
+    "dev": "npx serve . -p 5173",
+    "start": "npx serve ."
+  },
+  "keywords": ["study", "hub", "ai", "portfolio"],
+  "author": "Huyền Trân",
+  "license": "MIT"
+}
