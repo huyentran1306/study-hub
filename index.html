@@ -102,7 +102,7 @@
       position: relative;
       z-index: 1;
       width: 100%;
-      max-width: 1140px;
+      max-width: 1240px;
       margin: 0 auto;
       padding: 48px 24px 100px;
       display: flex;
@@ -243,19 +243,21 @@
     /* CARD GRID */
     .sd-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 28px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 22px;
       margin-top: 10px;
     }
 
-    @media (max-width: 980px) {
+    @media (max-width: 1120px) {
       .sd-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
       }
     }
     @media (max-width: 640px) {
       .sd-grid {
         grid-template-columns: 1fr;
+        gap: 20px;
       }
       .sd-head {
         margin-bottom: 32px;
@@ -941,6 +943,58 @@
         </div>
       </a>
 
+      <!-- ===================================================================
+           CARD 4: PORTFOLIO - NGUYỄN THỊ HUYỀN TRÂN
+           =================================================================== -->
+      <a class="sd-card" 
+         href="https://portfolio-nth.trann46698.workers.dev/huyen-tran" 
+         target="_blank"
+         style="--accent: #9333ea; --accent-bg: #faf5ff;"
+         onclick="handleCardClick(event, 'https://portfolio-nth.trann46698.workers.dev/huyen-tran', 'Huyền Trân Portfolio', 'Đang nạp Hồ sơ năng lực Tech Lead & Dự án công nghệ...', '👩‍💻', '#9333ea')">
+        
+        <div class="sd-card-stage">
+          <span class="sd-card-band"></span>
+          <span class="sd-card-shade"></span>
+          <span class="sd-card-grain"></span>
+
+          <!-- FLOATING TECH & STAR EMBERS -->
+          <span class="sd-fx" aria-hidden="true">
+            <i style="--x: 14%; --s: 14px; --d: 7.0s; --delay: -1.0s; --sw: 14px;">👩‍💻</i>
+            <i style="--x: 36%; --s: 15px; --d: 8.2s; --delay: -3.0s; --sw: -16px;">⚡</i>
+            <i style="--x: 60%; --s: 12px; --d: 6.8s; --delay: -2.4s; --sw: 14px;">💼</i>
+            <i style="--x: 80%; --s: 16px; --d: 7.5s; --delay: -4.2s; --sw: -12px;">✦</i>
+            <i style="--x: 92%; --s: 13px; --d: 8.6s; --delay: -0.8s; --sw: 16px;">🌟</i>
+          </span>
+
+          <div class="sd-stage-center">
+            <div class="sd-icon-badge">
+              <span>👩‍💻</span>
+              <div class="sd-icon-glow"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sd-card-content">
+          <div class="sd-card-tag">
+            <span>Tech Lead · Cloud Architect · Showcase</span>
+          </div>
+          <div class="sd-card-name">
+            <span>Huyền Trân Portfolio</span>
+            <span class="sd-card-arrow">→</span>
+          </div>
+          <p class="sd-card-desc">
+            Hồ sơ năng lực, kinh nghiệm Tech Lead / Senior .NET Developer, hệ thống kiến trúc Cloudflare Edge & AI và các dự án công nghệ tiêu biểu.
+          </p>
+
+          <div class="sd-card-pills">
+            <span class="sd-pill">💼 Tech Lead Journey</span>
+            <span class="sd-pill">⚡ Cloud & AI Systems</span>
+            <span class="sd-pill">🌟 Profile & Projects</span>
+          </div>
+        </div>
+      </a>
+
+
     </section>
 
 
@@ -1005,9 +1059,9 @@
     // 1. MASCOT TYPEWRITER ANIMATION
     const speechLines = [
       "Xin chào, mình là Huyền Trân! ✨",
-      "Hôm nay bạn muốn học tiếng Anh, lên lịch vi vu hay luyện đề thi? 🌸",
-      "Cùng bắt đầu buổi học thật nhiều năng lượng nha! 🚀",
-      "Mỗi bước tiến nhỏ hôm nay đều đưa bạn đến gần hơn với phiên bản rực rỡ nhất! 💖"
+      "Hôm nay bạn muốn khám phá Portfolio, luyện tiếng Anh hay ôn chứng chỉ? 🌸",
+      "Mỗi bước tiến nhỏ hôm nay đều đưa bạn đến gần hơn với phiên bản rực rỡ nhất! 🚀",
+      "Không ngừng tích lũy tri thức, để tự do làm chủ công nghệ và tương lai! 💖"
     ];
 
     let currentLineIndex = 0;
