@@ -2,33 +2,21 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Huyền Trân · Study & AI Ecosystem Hub</title>
-  <meta name="description" content="Trung tâm tổng hợp các ứng dụng học tập và công cụ AI: Study-En, Đi Đâu AI và Study Certificate.">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
-
-  <!-- Google Fonts: Lexend & Plus Jakarta Sans & Caveat -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Góc học tập của Huyền Trân ✨</title>
+  <meta name="description" content="Toàn bộ hệ sinh thái học tập và công cụ AI của Huyền Trân — bấm vào thẻ để mở ứng dụng tương ứng.">
+  <link rel="icon" href="./app-icon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Lexend:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     :root {
-      --font-main: 'Lexend', system-ui, -apple-system, sans-serif;
-      --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
-      --font-hand: 'Caveat', cursive, sans-serif;
-
-      --bg-base: #fbf9f5;
-      --bg-card: #ffffff;
-      --text-main: #1e293b;
-      --text-muted: #64748b;
-      --text-subtle: #94a3b8;
-      
-      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
-      --shadow-card: 0 14px 34px -10px rgba(30, 41, 59, 0.08), 0 0 0 1px rgba(30, 41, 59, 0.05);
-      --shadow-hover: 0 24px 48px -12px rgba(30, 41, 59, 0.16), 0 0 0 1px rgba(30, 41, 59, 0.08);
-
+      --sd-grain-ink: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='i' x='0' y='0' width='100%25' height='100%25'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 .12 0 0 0 0 .11 0 0 0 0 .17 2.6 0 0 0 -.9'/></filter><rect width='100%25' height='100%25' filter='url(%23i)'/></svg>");
       --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+      --font-sd: 'Lexend', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
     * {
@@ -37,460 +25,407 @@
       padding: 0;
     }
 
+    html {
+      overflow-x: hidden;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+    }
+
     body {
-      font-family: var(--font-main);
-      background-color: var(--bg-base);
-      color: var(--text-main);
+      color: #1f1d2b;
+      min-height: 100dvh;
+      font-family: var(--font-sd);
+      background-color: #ffffff;
+      background-image: 
+        radial-gradient(60% 40% at 8% 0, #ffe2e88c, #0000 65%),
+        radial-gradient(55% 38% at 100% 8%, #e2e8ff99, #0000 65%),
+        radial-gradient(60% 40% at 50% 112%, #f0e8ff8c, #0000 65%);
+      background-attachment: fixed;
+      position: relative;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .sd-root {
+      position: relative;
+      width: 100%;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      position: relative;
-      overflow-x: hidden;
-      background-image: 
-        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.05) 0px, transparent 50%),
-        radial-gradient(at 100% 0%, rgba(234, 88, 12, 0.05) 0px, transparent 50%),
-        radial-gradient(at 50% 100%, rgba(14, 165, 233, 0.05) 0px, transparent 50%);
     }
 
-    /* BACKGROUND SUBTLE NOISE & GLOW */
-    .bg-ambient-lights {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
-    }
-    .ambient-orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.45;
-      animation: floatOrb 18s ease-in-out infinite alternate;
-    }
-    .orb-1 {
-      width: 420px;
-      height: 420px;
-      background: #e0e7ff;
-      top: -80px;
-      left: -80px;
-    }
-    .orb-2 {
-      width: 380px;
-      height: 380px;
-      background: #fed7aa;
-      top: 15%;
-      right: -60px;
-      animation-delay: -6s;
-    }
-    .orb-3 {
-      width: 450px;
-      height: 450px;
-      background: #bae6fd;
-      bottom: -100px;
-      left: 20%;
-      animation-delay: -12s;
-    }
-
-    @keyframes floatOrb {
-      0% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(30px, 40px) scale(1.08); }
-      100% { transform: translate(-20px, 20px) scale(0.95); }
-    }
-
-    /* CONTAINER LAYOUT */
-    .sd-root {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      max-width: 1380px;
+    .sd-content {
+      max-width: 1440px;
       margin: 0 auto;
-      padding: 48px 24px 100px;
-      display: flex;
-      flex-direction: column;
+      padding: 64px 28px 96px;
+      position: relative;
+      width: 100%;
       flex: 1;
     }
 
-    /* HEADER & MASCOT SECTION */
+    /* =========================================================================
+       HEADER AREA WITH HAND-DRAWN UNDERLINE & MASCOT SPEECH BUBBLE
+       ========================================================================= */
     .sd-head {
       display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 48px;
-      gap: 24px;
       flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 16px 28px;
+      margin-bottom: 20px;
     }
 
     .sd-header-left {
-      max-width: 620px;
+      max-width: 740px;
     }
 
     .sd-kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      font-weight: 700;
+      letter-spacing: .28em;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: #6366f1;
-      background: rgba(99, 102, 241, 0.08);
-      padding: 5px 12px;
-      border-radius: 999px;
-      margin-bottom: 14px;
-      border: 1px solid rgba(99, 102, 241, 0.15);
+      color: #1f1d2b80;
+      margin-bottom: 12px;
+      font-size: 12px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     .sd-kicker-dot {
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: #6366f1;
-      box-shadow: 0 0 8px #6366f1;
+      background: #8a6d58;
+      display: inline-block;
+      animation: pulseDot 2s infinite ease-in-out;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.8); }
     }
 
     .sd-title {
-      font-size: clamp(32px, 5vw, 44px);
-      font-weight: 800;
-      letter-spacing: -0.025em;
-      line-height: 1.15;
-      color: #0f172a;
-      margin-bottom: 12px;
+      letter-spacing: -.02em;
+      color: #1f1d2b;
+      font-size: clamp(34px, 5.5vw, 56px);
+      font-weight: 300;
+      line-height: 1.1;
     }
+
     .sd-title-em {
-      background: linear-gradient(135deg, #4f46e5 0%, #ea580c 50%, #0284c7 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: #8a6d58;
+      font-weight: 600;
       display: inline-block;
+      position: relative;
+      animation: .6s cubic-bezier(.2, .9, .3, 1.35) both sd-title-pop;
+    }
+    @keyframes sd-title-pop {
+      0% { opacity: 0; transform: scale(.88) translateY(.06em); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .sd-title-em:after {
+      content: "";
+      opacity: .65;
+      background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12' preserveAspectRatio='none'><path d='M2 8 C 14 2, 26 2, 38 7 S 62 12, 74 6 S 98 1, 118 7' fill='none' stroke='%238a6d58' stroke-width='3.4' stroke-linecap='round'/></svg>") 50%/100% 100% no-repeat;
+      height: .16em;
+      position: absolute;
+      bottom: -.08em;
+      left: 1%;
+      right: 1%;
     }
 
     .sd-subtitle {
-      font-family: var(--font-body);
-      font-size: 15.5px;
-      color: var(--text-muted);
+      color: #1f1d2b9e;
+      margin-top: 14px;
+      font-size: 15px;
+      font-weight: 300;
       line-height: 1.6;
-      font-weight: 450;
+      max-width: 620px;
+      font-family: var(--font-body);
     }
 
-    /* MASCOT INTERACTIVE SPEECH */
+    /* MASCOT SPEECH BUBBLE & VIDEO */
     .sd-mascot {
-      display: flex;
+      flex: none;
       align-items: center;
-      gap: 14px;
-      background: #ffffff;
-      padding: 10px 18px 10px 12px;
-      border-radius: 999px;
-      box-shadow: 0 8px 24px -6px rgba(30, 41, 59, 0.08), 0 0 0 1px rgba(30, 41, 59, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(10px);
-      align-self: center;
-      transition: transform 0.3s var(--ease-spring), box-shadow 0.3s ease;
-    }
-    .sd-mascot:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 30px -8px rgba(30, 41, 59, 0.12), 0 0 0 1px rgba(30, 41, 59, 0.08);
+      margin-left: auto;
+      display: flex;
     }
 
-    .sd-avatar-wrap {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #e0e7ff 0%, #ffedd5 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      position: relative;
-      flex-shrink: 0;
-      box-shadow: 0 4px 10px rgba(79, 70, 229, 0.15);
-    }
-    .sd-avatar-pulse {
-      position: absolute;
-      inset: -3px;
-      border-radius: 50%;
-      border: 2px solid #6366f1;
-      opacity: 0.4;
-      animation: avatarPulse 2.5s infinite;
-    }
-    @keyframes avatarPulse {
-      0% { transform: scale(0.95); opacity: 0.6; }
-      50% { transform: scale(1.15); opacity: 0; }
-      100% { transform: scale(0.95); opacity: 0; }
+    .sd-says {
+      flex: none;
+      place-items: end;
+      margin: 0 -24px 28px 0;
+      display: grid;
+      z-index: 5;
     }
 
-    .sd-speech-bubble {
+    .sd-say {
+      white-space: pre-line;
+      color: #1f1d2b;
+      transform-origin: 100% 100%;
+      background: #fffffff5;
+      border-radius: 22px 22px 6px;
+      grid-area: 1/1;
+      max-width: 250px;
+      padding: 13px 18px 14px;
       font-size: 13.5px;
-      color: #334155;
-      font-weight: 600;
-      min-width: 200px;
-      max-width: 280px;
-    }
-    .sd-typing-text {
-      color: #0f172a;
-    }
-    .sd-typing-caret {
-      display: inline-block;
-      width: 2px;
-      height: 14px;
-      background: #4f46e5;
-      margin-left: 2px;
-      vertical-align: -1px;
-      animation: blink 0.8s infinite;
-    }
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
+      font-weight: 400;
+      line-height: 1.5;
+      position: relative;
+      box-shadow: 0 16px 36px -16px #463c6e6b, 0 0 0 1px #1f1d2b0d;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      font-family: var(--font-body);
     }
 
-    /* CARD GRID */
+    .sd-say:after {
+      content: "";
+      background: #fffffff5;
+      border-radius: 3px;
+      width: 14px;
+      height: 14px;
+      position: absolute;
+      bottom: 13px;
+      right: -6px;
+      transform: rotate(45deg);
+    }
+
+    .sd-say-caret {
+      vertical-align: -.16em;
+      background: #8a6d58;
+      width: 2px;
+      height: 1.1em;
+      display: inline-block;
+      animation: blink 1s step-end infinite;
+      margin-left: 2px;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .sd-mascot-video {
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      mix-blend-mode: multiply;
+      width: 236px;
+      display: block;
+      -webkit-mask-image: linear-gradient(90deg, #0000 0, #000 22% 78%, #0000 100%), linear-gradient(#0000 0, #000 14% 88%, #0000 100%);
+      mask-image: linear-gradient(90deg, #0000 0, #000 22% 78%, #0000 100%), linear-gradient(#0000 0, #000 14% 88%, #0000 100%);
+      -webkit-mask-composite: source-in;
+      mask-composite: intersect;
+      border-radius: 24px;
+    }
+
+    /* =========================================================================
+       CARD GRID & LUXURIOUS GLASS STAGE CARDS
+       ========================================================================= */
     .sd-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 22px;
-      margin-top: 10px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 32px;
+      margin-top: 36px;
     }
 
+    @media (max-width: 1100px) {
+      .sd-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px;
+      }
+    }
     @media (max-width: 640px) {
       .sd-grid {
         grid-template-columns: 1fr;
         gap: 20px;
       }
-      .sd-head {
-        margin-bottom: 32px;
+      .sd-mascot {
+        display: none;
       }
     }
 
-    /* SD-CARD COMPONENT */
     .sd-card {
+      color: inherit;
+      border-radius: 32px;
       text-decoration: none;
-      display: flex;
-      flex-direction: column;
-      background: var(--bg-card);
-      border-radius: 24px;
-      overflow: hidden;
+      transition: transform .45s cubic-bezier(.2, .8, .2, 1), box-shadow .45s;
+      display: block;
+      box-shadow: 0 24px 50px -26px #463c6e66, 0 0 #0000;
       position: relative;
-      box-shadow: var(--shadow-card);
-      transition: all 0.4s var(--ease-spring);
       cursor: pointer;
-      user-select: none;
-      border: 1px solid rgba(255, 255, 255, 0.7);
+      background: #ffffff;
+      outline: none;
     }
 
-    .sd-card:hover {
+    .sd-card:hover, .sd-card:focus-visible {
       transform: translateY(-8px);
-      box-shadow: var(--shadow-hover);
+      box-shadow: 0 38px 70px -28px #463c6e7a, 
+                  0 0 34px -4px color-mix(in srgb, var(--accent) 75%, transparent), 
+                  0 0 0 1.5px color-mix(in srgb, var(--accent) 55%, transparent);
     }
 
-    /* CARD STAGE & CANVAS EFFECTS */
     .sd-card-stage {
-      height: 200px;
+      isolation: isolate;
+      aspect-ratio: 4/3;
+      border-radius: inherit;
+      background: #f6f3fa;
+      display: block;
       position: relative;
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: var(--accent-bg, #f8fafc);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+      container-type: inline-size;
     }
 
-    /* GRADIENT SHADE OVERLAY */
-    .sd-card-shade {
+    .sd-card-video {
+      z-index: -2;
+      object-fit: cover;
+      object-position: 50% 40%;
+      width: 100%;
+      height: 100%;
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 2;
+      transform: scale(1.02);
+      transition: transform .6s cubic-bezier(.16, 1, .3, 1);
     }
-
-    /* FILM GRAIN TEXTURE */
-    .sd-card-grain {
-      position: absolute;
-      inset: 0;
-      opacity: 0.04;
-      pointer-events: none;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-      z-index: 3;
-    }
-
-    /* CARD ACCENT BAND AT TOP */
-    .sd-card-band {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: var(--accent);
-      z-index: 4;
-      transition: height 0.3s ease;
-    }
-    .sd-card:hover .sd-card-band {
-      height: 6px;
-    }
-
-    /* HERO STAGE ILLUSTRATION / LOGO */
-    .sd-stage-center {
-      position: relative;
-      z-index: 3;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.4s var(--ease-spring);
-    }
-    .sd-card:hover .sd-stage-center {
+    .sd-card:hover .sd-card-video {
       transform: scale(1.08);
     }
 
-    .sd-icon-badge {
-      width: 72px;
-      height: 72px;
-      border-radius: 20px;
-      background: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 32px;
-      box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
-      position: relative;
-    }
-    .sd-icon-glow {
-      position: absolute;
-      inset: -6px;
-      border-radius: 24px;
-      background: var(--accent);
-      opacity: 0.15;
-      filter: blur(8px);
+    .sd-card-shade {
       z-index: -1;
-      transition: opacity 0.3s ease;
-    }
-    .sd-card:hover .sd-icon-glow {
-      opacity: 0.35;
-    }
-
-    /* FLOATING PARTICLES FX (CUSTOM STYLED FOR EACH APP) */
-    .sd-fx {
+      mix-blend-mode: multiply;
+      background: radial-gradient(circle at 84% 12%, color-mix(in srgb, var(--accent) 20%, #fff) 0, transparent 55%), 
+                  linear-gradient(180deg, #f1eef8 0%, #f9f1f3 55%, #fcf5ee 100%);
       position: absolute;
       inset: 0;
-      overflow: hidden;
-      pointer-events: none;
+    }
+
+    /* FROSTED GLASS LOWER BAND */
+    .sd-card-band {
       z-index: 1;
-    }
-    .sd-fx i {
+      pointer-events: none;
+      backdrop-filter: blur(4px) saturate(110%);
+      -webkit-backdrop-filter: blur(4px) saturate(110%);
+      background: linear-gradient(#fff0 0%, #ffffff8c 50%, #fffffffa 100%);
+      height: 44%;
       position: absolute;
-      bottom: -20px;
-      left: var(--x, 50%);
-      font-style: normal;
-      font-size: var(--s, 14px);
-      opacity: 0;
-      animation: particleRise var(--d, 6s) infinite linear;
-      animation-delay: var(--delay, 0s);
-      color: var(--accent);
+      bottom: 0;
+      left: 0;
+      right: 0;
+      -webkit-mask-image: linear-gradient(#0000 0%, #000 35%);
+      mask-image: linear-gradient(#0000 0%, #000 35%);
     }
 
-    @keyframes particleRise {
-      0% {
-        transform: translateY(0) translateX(0) rotate(0deg);
-        opacity: 0;
-      }
-      20% {
-        opacity: 0.8;
-      }
-      80% {
-        opacity: 0.6;
-      }
-      100% {
-        transform: translateY(-240px) translateX(var(--sw, 20px)) rotate(180deg);
-        opacity: 0;
-      }
-    }
-
-    /* CARD CONTENT */
-    .sd-card-content {
-      padding: 24px;
+    .sd-card-copy {
+      z-index: 2;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 16px 24px 22px;
       display: flex;
       flex-direction: column;
-      flex: 1;
-      background: #ffffff;
-    }
-
-    .sd-card-tag {
-      font-size: 11.5px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--accent);
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
 
     .sd-card-name {
-      font-size: 21px;
-      font-weight: 800;
-      color: #0f172a;
-      letter-spacing: -0.015em;
-      margin-bottom: 10px;
+      font-family: var(--font-sd);
+      font-size: 19px;
+      font-weight: 700;
+      color: #1f1d2b;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      letter-spacing: -0.3px;
     }
     .sd-card-arrow {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: rgba(0, 0, 0, 0.04);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      color: #64748b;
-      transition: all 0.3s var(--ease-spring);
+      font-size: 18px;
+      color: var(--accent);
+      transition: transform 0.3s ease;
     }
     .sd-card:hover .sd-card-arrow {
-      background: var(--accent);
-      color: #ffffff;
       transform: translateX(4px);
     }
 
     .sd-card-desc {
       font-family: var(--font-body);
-      font-size: 13.5px;
-      color: var(--text-muted);
-      line-height: 1.6;
-      margin-bottom: 20px;
-      flex: 1;
+      font-size: 13px;
+      font-weight: 400;
+      color: #1f1d2ba6;
+      line-height: 1.5;
     }
 
-    /* PILLS / FEATURES */
-    .sd-card-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: auto;
-      padding-top: 14px;
-      border-top: 1px dashed rgba(0, 0, 0, 0.06);
+    /* FLOATING PARTICLES SYSTEM */
+    .sd-fx {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
     }
-    .sd-pill {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 4px 9px;
-      border-radius: 6px;
-      background: rgba(0, 0, 0, 0.03);
-      color: #475569;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
+    .sd-fx i {
+      position: absolute;
+      left: var(--x);
+      width: var(--s);
+      height: var(--s);
+      opacity: 0;
+      font-style: normal;
+      user-select: none;
+    }
+
+    /* 1. SAKURA PETALS */
+    @keyframes sd-fall {
+      0% { transform: translateY(-10px) rotate(0deg); opacity: 0; }
+      15% { opacity: 0.85; }
+      85% { opacity: 0.85; }
+      100% { transform: translateY(115cqw) rotate(360deg); opacity: 0; }
+    }
+    @keyframes sd-sway {
+      0% { margin-left: calc(var(--sw) * -1); }
+      100% { margin-left: var(--sw); }
+    }
+    .sd-fx-sakura i {
+      height: calc(var(--s) * .72);
+      animation: sd-fall var(--d) linear var(--delay) infinite, sd-sway calc(var(--d) / 3.2) ease-in-out var(--delay) infinite alternate;
+      background: linear-gradient(135deg, #ffeaf1 0%, #ffb9d0 58%, #ff92b8 100%);
+      border-radius: 80% 0;
+      top: -6cqw;
+      box-shadow: 0 1px 3px #ff78a566;
+    }
+
+    /* 2. GLOWING EMBERS */
+    @keyframes sd-float-up {
+      0% { transform: translateY(0) scale(0.7); opacity: 0; }
+      20% { opacity: 0.9; }
+      80% { opacity: 0.9; }
+      100% { transform: translateY(-120cqw) scale(1.1); opacity: 0; }
+    }
+    .sd-fx-embers i {
+      animation: sd-float-up var(--d) ease-out var(--delay) infinite, sd-sway calc(var(--d) / 3) ease-in-out var(--delay) infinite alternate;
+      background: radial-gradient(circle, #fff3b0 0, #ffb52e 40%, #ff7a18 62%, #ff6e1400 78%);
+      border-radius: 50%;
+      bottom: -4cqw;
+      box-shadow: 0 0 10px 3px #ff821eb3;
+    }
+
+    /* 3. CYBER & MUSIC GLYPHS */
+    .sd-fx-glyphs i {
+      animation: sd-float-up var(--d) ease-out var(--delay) infinite, sd-sway calc(var(--d) / 3.5) ease-in-out var(--delay) infinite alternate;
+      color: var(--accent);
+      font-size: var(--s);
+      line-height: 1;
+      bottom: -6cqw;
+      text-shadow: 0 2px 8px rgba(255, 255, 255, 0.9);
+      font-weight: 700;
     }
 
     /* =========================================================================
-       APP LOADER TRANSITION (BLURRED SCREEN ON CARD CLICK)
+       APP LOADER OVERLAY
        ========================================================================= */
     .app-loader {
       position: fixed;
       inset: 0;
       z-index: 9999;
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -508,28 +443,27 @@
     }
 
     .app-loader-circle {
-      width: 140px;
-      height: 140px;
+      width: 130px;
+      height: 130px;
       border-radius: 50%;
       background: #ffffff;
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 54px;
+      font-size: 50px;
       position: relative;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
       transform: scale(0.9);
       transition: transform 0.3s var(--ease-spring);
     }
     .app-loader.active .app-loader-circle {
       transform: scale(1);
     }
-
     .app-loader-circle::before {
       content: "";
       position: absolute;
-      inset: -12px;
+      inset: -10px;
       border-radius: 50%;
       border: 4px solid rgba(0, 0, 0, 0.06);
       border-top-color: var(--loader-accent, #4f46e5);
@@ -540,7 +474,8 @@
     }
 
     .app-loader-title {
-      font-size: 18px;
+      font-family: var(--font-sd);
+      font-size: 19px;
       font-weight: 700;
       color: #0f172a;
       margin-bottom: 6px;
@@ -548,7 +483,7 @@
     .app-loader-msg {
       font-family: var(--font-body);
       font-size: 14px;
-      color: var(--text-muted);
+      color: #64748b;
       animation: pulseMsg 1.6s ease-in-out infinite alternate;
     }
     @keyframes pulseMsg {
@@ -557,285 +492,56 @@
     }
 
     /* =========================================================================
-       FLOATING FEEDBACK & CONNECT WIDGET ("Nhắn tin cho Trân")
-       ========================================================================= */
-    .dw-root {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      z-index: 500;
-      font-family: var(--font-main);
-    }
-
-    .dw-frame {
-      background: #ffffff;
-      border-radius: 999px;
-      width: 172px;
-      height: 42px;
-      box-shadow: 0 12px 28px -6px rgba(30, 41, 59, 0.14), 0 0 0 1px rgba(30, 41, 59, 0.06);
-      transition: width 0.4s var(--ease-spring), height 0.4s var(--ease-spring), border-radius 0.4s ease, box-shadow 0.3s ease;
-      position: relative;
-      overflow: hidden;
-      cursor: pointer;
-    }
-    .dw-frame:hover {
-      box-shadow: 0 18px 36px -8px rgba(30, 41, 59, 0.2), 0 0 0 1px rgba(30, 41, 59, 0.08);
-    }
-    .dw-frame.open {
-      cursor: default;
-      border-radius: 20px;
-      width: 310px;
-      height: 380px;
-    }
-
-    .dw-mini {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      font-size: 12.5px;
-      font-weight: 700;
-      color: #1e293b;
-      padding: 0 16px;
-      transition: opacity 0.2s ease;
-    }
-    .dw-frame.open .dw-mini {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .dw-full {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      padding: 20px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s ease;
-    }
-    .dw-frame.open .dw-full {
-      opacity: 1;
-      pointer-events: auto;
-      transition-delay: 0.15s;
-    }
-
-    .dw-close {
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      background: rgba(0, 0, 0, 0.05);
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      color: #64748b;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .dw-close:hover {
-      background: rgba(0, 0, 0, 0.1);
-      color: #0f172a;
-    }
-
-    .dw-widget-title {
-      font-size: 15px;
-      font-weight: 800;
-      color: #0f172a;
-      margin-bottom: 4px;
-    }
-    .dw-widget-subtitle {
-      font-size: 11.5px;
-      color: #64748b;
-      margin-bottom: 14px;
-    }
-
-    .dw-tabs {
-      display: flex;
-      background: rgba(0, 0, 0, 0.04);
-      padding: 3px;
-      border-radius: 999px;
-      margin-bottom: 14px;
-      gap: 4px;
-    }
-    .dw-tab-btn {
-      flex: 1;
-      border: none;
-      background: transparent;
-      padding: 6px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 700;
-      color: #64748b;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .dw-tab-btn.active {
-      background: #ffffff;
-      color: #0f172a;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-    }
-
-    .dw-panel {
-      display: none;
-      flex-direction: column;
-      flex: 1;
-    }
-    .dw-panel.active {
-      display: flex;
-    }
-
-    .dw-textarea {
-      width: 100%;
-      flex: 1;
-      border: 1px solid rgba(0, 0, 0, 0.1);
-      background: #f8fafc;
-      border-radius: 12px;
-      padding: 10px 12px;
-      font-family: var(--font-body);
-      font-size: 12.5px;
-      resize: none;
-      color: #1e293b;
-      margin-bottom: 10px;
-    }
-    .dw-textarea:focus {
-      outline: none;
-      border-color: #6366f1;
-      background: #ffffff;
-    }
-
-    .dw-submit-btn {
-      background: #0f172a;
-      color: #ffffff;
-      border: none;
-      border-radius: 999px;
-      padding: 9px 16px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: opacity 0.2s ease;
-    }
-    .dw-submit-btn:hover {
-      opacity: 0.9;
-    }
-
-    /* FOOTER BADGE */
-    .sd-footer {
-      text-align: center;
-      margin-top: 60px;
-      font-size: 12.5px;
-      color: var(--text-subtle);
-      font-family: var(--font-body);
-    }
-    .sd-footer a {
-      color: #6366f1;
-      text-decoration: none;
-      font-weight: 600;
-    }
-    .sd-footer a:hover {
-      text-decoration: underline;
-    }
-  
-    /* =========================================================================
-       INITIAL PAGE PRELOADER & STAGGER REVEAL ANIMATIONS
+       INITIAL PAGE PRELOADER & SPLASH SCREEN
        ========================================================================= */
     .page-preloader {
       position: fixed;
       inset: 0;
       z-index: 99999;
-      background: #fbf9f5;
+      background: #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
       opacity: 1;
       visibility: visible;
-      transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), 
-                  transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), 
-                  filter 0.55s ease, 
-                  visibility 0.55s;
+      transition: opacity 0.55s var(--ease-spring), transform 0.65s var(--ease-spring), filter 0.55s ease, visibility 0.55s;
     }
-
     .page-preloader.done {
       opacity: 0;
       visibility: hidden;
-      transform: scale(1.06);
-      filter: blur(10px);
+      transform: scale(1.05);
+      filter: blur(8px);
       pointer-events: none;
-    }
-
-    .preloader-backdrop {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-    .preloader-orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(90px);
-      opacity: 0.5;
-    }
-    .preloader-orb-1 {
-      width: 420px;
-      height: 420px;
-      background: rgba(99, 102, 241, 0.25);
-      top: -120px;
-      left: -100px;
-      animation: floatOrb 16s ease-in-out infinite alternate;
-    }
-    .preloader-orb-2 {
-      width: 380px;
-      height: 380px;
-      background: rgba(236, 72, 153, 0.2);
-      bottom: -100px;
-      right: -80px;
-      animation: floatOrb 18s ease-in-out infinite alternate-reverse;
     }
 
     .preloader-card {
-      position: relative;
-      z-index: 2;
       text-align: center;
       padding: 36px 32px;
       max-width: 360px;
       width: 90%;
-      background: rgba(255, 255, 255, 0.88);
+      background: rgba(255, 255, 255, 0.92);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-radius: 32px;
-      border: 1px solid rgba(255, 255, 255, 0.9);
-      box-shadow: 0 20px 50px -15px rgba(30, 41, 59, 0.08), 0 0 0 1px rgba(30, 41, 59, 0.04);
-      animation: preloaderPop 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      box-shadow: 0 24px 50px -15px rgba(30, 41, 59, 0.08);
+      animation: preloaderPop 0.6s var(--ease-spring) both;
     }
-
     @keyframes preloaderPop {
-      from {
-        opacity: 0;
-        transform: scale(0.92) translateY(16px);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-      }
+      from { opacity: 0; transform: scale(0.92) translateY(16px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
     }
 
     .preloader-avatar-box {
       position: relative;
       width: 86px;
       height: 86px;
-      margin: 0 auto 18px;
+      margin: 0 auto 16px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-
     .preloader-halo {
       position: absolute;
       inset: -6px;
@@ -845,9 +551,7 @@
       filter: blur(8px);
       animation: rotateHalo 3.5s linear infinite;
     }
-    @keyframes rotateHalo {
-      to { transform: rotate(360deg); }
-    }
+    @keyframes rotateHalo { to { transform: rotate(360deg); } }
 
     .preloader-avatar {
       position: relative;
@@ -862,48 +566,26 @@
       font-size: 38px;
       border: 2px solid rgba(255, 255, 255, 0.95);
       z-index: 2;
-      animation: preloaderFloat 2.2s ease-in-out infinite alternate;
-    }
-    @keyframes preloaderFloat {
-      from { transform: translateY(0); }
-      to { transform: translateY(-5px); }
     }
 
-    .preloader-sparkle {
-      position: absolute;
-      font-size: 17px;
-      z-index: 3;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-      animation: sparklePop 1.8s ease-in-out infinite alternate;
-    }
-    .sparkle-1 { top: -6px; right: -6px; animation-delay: 0.1s; }
-    .sparkle-2 { bottom: -2px; left: -8px; animation-delay: 0.9s; }
-    @keyframes sparklePop {
-      0% { transform: scale(0.85) rotate(-12deg); opacity: 0.65; }
-      100% { transform: scale(1.25) rotate(18deg); opacity: 1; }
-    }
-
-    .preloader-brand {
-      margin-bottom: 4px;
-    }
     .preloader-kicker {
       display: inline-block;
-      font-size: 9.5px;
-      font-weight: 800;
+      font-size: 10px;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1.5px;
-      color: #6366f1;
-      background: #eef2ff;
+      color: #8a6d58;
+      background: #fbf7f4;
       padding: 3px 10px;
       border-radius: 20px;
       margin-bottom: 8px;
     }
     .preloader-title {
-      font-family: var(--font-main);
-      font-size: 19px;
-      font-weight: 800;
-      color: #0f172a;
-      letter-spacing: -0.5px;
+      font-family: var(--font-sd);
+      font-size: 20px;
+      font-weight: 700;
+      color: #1f1d2b;
+      letter-spacing: -0.3px;
     }
 
     .preloader-bar-wrap {
@@ -918,427 +600,402 @@
     .preloader-bar {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899);
+      background: linear-gradient(90deg, #8a6d58, #c9667a, #6366f1);
       border-radius: 99px;
-      box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
       transition: width 0.35s ease;
     }
-
     .preloader-status {
       font-family: var(--font-body);
       font-size: 12px;
       color: #64748b;
-      font-weight: 500;
       min-height: 18px;
-      transition: all 0.2s ease;
     }
 
-    /* Staggered entrance for page content */
-    .sd-head {
-      animation: heroSlideDown 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+    /* FLOATING FEEDBACK & CONNECT WIDGET ("Nhắn tin cho Trân") */
+    .dw-root {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 500;
+      font-family: var(--font-body);
     }
-    @keyframes heroSlideDown {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .dw-frame {
+      background: #ffffff;
+      border-radius: 999px;
+      width: 172px;
+      height: 42px;
+      box-shadow: 0 12px 28px -6px rgba(30, 41, 59, 0.14), 0 0 0 1px rgba(30, 41, 59, 0.06);
+      transition: width 0.4s var(--ease-spring), height 0.4s var(--ease-spring), border-radius 0.4s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .dw-frame:hover {
+      box-shadow: 0 18px 36px -8px rgba(30, 41, 59, 0.2), 0 0 0 1px rgba(30, 41, 59, 0.08);
+    }
+    .dw-pill-bar {
+      height: 42px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      gap: 9px;
+    }
+    .dw-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ffe2e8, #e2e8ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+    .dw-label {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #1e293b;
+      white-space: nowrap;
+    }
+    .dw-status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10b981;
+      margin-left: auto;
+      box-shadow: 0 0 6px #10b981;
     }
 
-    .sd-card {
-      animation: cardStagger 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+    .dw-expanded-body {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      height: calc(100% - 46px);
     }
-    .sd-card:nth-child(1) { animation-delay: 0.12s; }
-    .sd-card:nth-child(2) { animation-delay: 0.22s; }
-    .sd-card:nth-child(3) { animation-delay: 0.32s; }
-    .sd-card:nth-child(4) { animation-delay: 0.42s; }
-    .sd-card:nth-child(5) { animation-delay: 0.52s; }
-
-    @keyframes cardStagger {
-      from {
-        opacity: 0;
-        transform: translateY(30px) scale(0.96);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
+    .dw-frame.open {
+      width: 320px;
+      height: 380px;
+      border-radius: 28px;
+      cursor: default;
     }
-
+    .dw-frame.open .dw-expanded-body {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .dw-close-btn {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(0, 0, 0, 0.05);
+      color: #64748b;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .dw-close-btn:hover {
+      background: rgba(0, 0, 0, 0.1);
+      color: #0f172a;
+    }
+    .dw-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+      background: #f1f5f9;
+      padding: 3px;
+      border-radius: 12px;
+    }
+    .dw-tab-btn {
+      flex: 1;
+      padding: 6px 10px;
+      border-radius: 9px;
+      border: none;
+      background: transparent;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #64748b;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .dw-tab-btn.active {
+      background: #ffffff;
+      color: #0f172a;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    }
+    .dw-panel {
+      display: none;
+      flex-direction: column;
+      flex: 1;
+    }
+    .dw-panel.active {
+      display: flex;
+    }
+    .dw-textarea {
+      width: 100%;
+      flex: 1;
+      resize: none;
+      border-radius: 14px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      padding: 10px 12px;
+      font-family: inherit;
+      font-size: 12px;
+      color: #1e293b;
+      background: #fafafa;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .dw-textarea:focus {
+      border-color: #8a6d58;
+      background: #ffffff;
+    }
+    .dw-submit-btn {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 12px;
+      border: none;
+      background: #1e293b;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .dw-submit-btn:hover {
+      background: #8a6d58;
+    }
   </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-  <!-- =========================================================================
-       INITIAL PAGE PRELOADER & SPLASH SCREEN
-       ========================================================================= -->
-  <div class="page-preloader" id="pagePreloader" aria-hidden="true">
-    <div class="preloader-backdrop">
-      <div class="preloader-orb preloader-orb-1"></div>
-      <div class="preloader-orb preloader-orb-2"></div>
-    </div>
 
+  <!-- INITIAL PAGE PRELOADER -->
+  <div class="page-preloader" id="pagePreloader" aria-hidden="true">
     <div class="preloader-card">
       <div class="preloader-avatar-box">
         <div class="preloader-halo"></div>
         <div class="preloader-avatar">
           <span>👩‍💻</span>
         </div>
-        <div class="preloader-sparkle sparkle-1">✨</div>
-        <div class="preloader-sparkle sparkle-2">🌸</div>
       </div>
-
-      <div class="preloader-brand">
-        <span class="preloader-kicker">HỆ SINH THÁI HỌC TẬP & CÔNG NGHỆ</span>
-        <h2 class="preloader-title">Huyền Trân thích học ✨</h2>
-      </div>
-
-      <!-- Shimmer Progress Bar -->
+      <span class="preloader-kicker">HỆ SINH THÁI HỌC TẬP & CÔNG NGHỆ</span>
+      <h2 class="preloader-title">Huyền Trân thích học ✨</h2>
       <div class="preloader-bar-wrap">
         <div class="preloader-bar" id="preloaderBar"></div>
       </div>
-
-      <!-- Dynamic Loading Status -->
       <p class="preloader-status" id="preloaderStatus">Đang nạp không gian tri thức...</p>
     </div>
   </div>
 
-
-  <!-- AMBIENT BACKGROUND GLOWS -->
-  <div class="bg-ambient-lights" aria-hidden="true">
-    <div class="ambient-orb orb-1"></div>
-    <div class="ambient-orb orb-2"></div>
-    <div class="ambient-orb orb-3"></div>
-  </div>
-
   <main class="sd-root">
-    <!-- HEADER -->
-    <header class="sd-head">
-      <div class="sd-header-left">
-        <div class="sd-kicker">
-          <span class="sd-kicker-dot"></span>
-          <span>Hệ Sinh Thái Học Tập & AI</span>
+    <div class="sd-content">
+
+      <!-- HEADER -->
+      <header class="sd-head">
+        <div class="sd-header-left">
+          <div class="sd-kicker">
+            <span class="sd-kicker-dot"></span>
+            <span>Hệ Sinh Thái Học Tập & AI</span>
+          </div>
+          <h1 class="sd-title">
+            Góc học tập của <span class="sd-title-em">Huyền Trân</span> ✨
+          </h1>
+          <p class="sd-subtitle">
+            Không ngừng tích lũy tri thức, để tự do làm chủ công nghệ và sống cuộc đời bạn mơ ước. Bấm vào từng thẻ để khám phá ứng dụng nhé!
+          </p>
         </div>
-        <h1 class="sd-title">
-          <span class="sd-title-em">Huyền Trân</span> thích học ✨
-        </h1>
-        <p class="sd-subtitle">
-          Không ngừng tích lũy tri thức, để tự do làm chủ công nghệ và sống cuộc đời bạn mơ ước ✨
-        </p>
-      </div>
 
-      <!-- MASCOT INTERACTIVE SPEECH -->
-      <div class="sd-mascot" id="mascotBubble">
-        <div class="sd-avatar-wrap">
-          <div class="sd-avatar-pulse"></div>
-          <span>👩‍💻</span>
-        </div>
-        <div class="sd-speech-bubble">
-          <span class="sd-typing-text" id="mascotText">Xin chào bạn!</span>
-          <span class="sd-typing-caret" id="mascotCaret"></span>
-        </div>
-      </div>
-    </header>
-
-    <!-- 3 HERO APP CARDS GRID -->
-    <section class="sd-grid">
-
-      <!-- ===================================================================
-           CARD 1: STUDY-EN (TECH LEAD ENGLISH)
-           =================================================================== -->
-      <a class="sd-card" 
-         href="https://study-en.trann46698.workers.dev" 
-         target="_blank"
-         style="--accent: #4f46e5; --accent-bg: #eef2ff;"
-         onclick="handleCardClick(event, 'https://study-en.trann46698.workers.dev', 'Study-En', 'Đang nạp Tech Lead Writing Co-pilot & Roleplay Arena...', '💻', '#4f46e5')">
-        
-        <div class="sd-card-stage">
-          <span class="sd-card-band"></span>
-          <span class="sd-card-shade"></span>
-          <span class="sd-card-grain"></span>
-
-          <!-- FLOATING SYNTAX & CYBER PARTICLES -->
-          <span class="sd-fx" aria-hidden="true">
-            <i style="--x: 15%; --s: 14px; --d: 6.8s; --delay: -1.2s; --sw: 16px;">{ }</i>
-            <i style="--x: 35%; --s: 16px; --d: 8.2s; --delay: -3.5s; --sw: -14px;">&lt;/&gt;</i>
-            <i style="--x: 55%; --s: 13px; --d: 7.1s; --delay: -2.0s; --sw: 18px;">⚡</i>
-            <i style="--x: 75%; --s: 15px; --d: 9.0s; --delay: -5.1s; --sw: -12px;">λ</i>
-            <i style="--x: 88%; --s: 12px; --d: 6.5s; --delay: -0.6s; --sw: 10px;">✦</i>
-          </span>
-
-          <div class="sd-stage-center">
-            <div class="sd-icon-badge">
-              <span>💻</span>
-              <div class="sd-icon-glow"></div>
+        <!-- MASCOT SPEECH & VIDEO -->
+        <div class="sd-mascot">
+          <div class="sd-says">
+            <div class="sd-say">
+              <span id="mascotText">Xin chào bạn!</span>
+              <span class="sd-say-caret"></span>
             </div>
           </div>
+          <video class="sd-mascot-video" autoplay muted loop playsinline src="./media/study-mascot.mp4" aria-hidden="true"></video>
         </div>
+      </header>
 
-        <div class="sd-card-content">
-          <div class="sd-card-tag">
-            <span>Tech Lead · AI Roleplay · Pronunciation</span>
-          </div>
-          <div class="sd-card-name">
-            <span>Study-En</span>
-            <span class="sd-card-arrow">→</span>
-          </div>
-          <p class="sd-card-desc">
-            Nâng cấp câu tiếng Anh chuẩn Tech Lead/C-Level, luyện phản xạ phỏng vấn nhập vai CTO và luyện phát âm bản ngữ với Deepgram Aura-2.
-          </p>
+      <!-- 5 HERO APP CARDS GRID -->
+      <section class="sd-grid">
 
-          <div class="sd-card-pills">
-            <span class="sd-pill">✍️ Fix My English</span>
-            <span class="sd-pill">🎭 NPC Battle Arena</span>
-            <span class="sd-pill">🎙️ Whisper STT</span>
-          </div>
-        </div>
-      </a>
-
-      <!-- ===================================================================
-           CARD 2: ĐI ĐÂU AI (TRAVEL PLANNER)
-           =================================================================== -->
-      <a class="sd-card" 
-         href="https://di-dau-ai.trann46698.workers.dev" 
-         target="_blank"
-         style="--accent: #ea580c; --accent-bg: #fff7ed;"
-         onclick="handleCardClick(event, 'https://di-dau-ai.trann46698.workers.dev', 'Đi Đâu AI', 'Đang kết nối Cloudflare Workers AI & Trợ lý du lịch...', '✈️', '#ea580c')">
-        
-        <div class="sd-card-stage">
-          <span class="sd-card-band"></span>
-          <span class="sd-card-shade"></span>
-          <span class="sd-card-grain"></span>
-
-          <!-- FLOATING TRAVEL EMBERS & STARS -->
-          <span class="sd-fx" aria-hidden="true">
-            <i style="--x: 12%; --s: 16px; --d: 6.2s; --delay: -0.8s; --sw: 18px;">✈️</i>
-            <i style="--x: 32%; --s: 14px; --d: 7.5s; --delay: -2.4s; --sw: -16px;">📍</i>
-            <i style="--x: 58%; --s: 12px; --d: 8.0s; --delay: -4.2s; --sw: 14px;">☀️</i>
-            <i style="--x: 78%; --s: 15px; --d: 6.9s; --delay: -1.5s; --sw: -12px;">✦</i>
-            <i style="--x: 90%; --s: 13px; --d: 8.5s; --delay: -5.0s; --sw: 16px;">🏝️</i>
-          </span>
-
-          <div class="sd-stage-center">
-            <div class="sd-icon-badge">
-              <span>✈️</span>
-              <div class="sd-icon-glow"></div>
+        <!-- CARD 1: STUDY-EN (TECH LEAD ENGLISH) -->
+        <a class="sd-card" 
+           href="https://study-en.trann46698.workers.dev" 
+           target="_blank"
+           style="--accent: #4f46e5;"
+           onclick="handleCardClick(event, 'https://study-en.trann46698.workers.dev', 'Study-En · TranTech Talk', 'Đang nạp phòng luyện phản xạ Tech Lead & Call Solution...', '💻', '#4f46e5')">
+          <div class="sd-card-stage">
+            <video class="sd-card-video" autoplay muted loop playsinline preload="auto" src="./media/study-en.mp4"></video>
+            <div class="sd-card-shade"></div>
+            <div class="sd-fx sd-fx-glyphs" aria-hidden="true">
+              <i style="--x: 12%; --s: 14px; --d: 6.8s; --delay: -1.2s; --sw: 16px;">{ }</i>
+              <i style="--x: 35%; --s: 15px; --d: 8.2s; --delay: -3.5s; --sw: -14px;">&lt;/&gt;</i>
+              <i style="--x: 58%; --s: 13px; --d: 7.1s; --delay: -2.0s; --sw: 18px;">⚡</i>
+              <i style="--x: 80%; --s: 15px; --d: 9.0s; --delay: -5.1s; --sw: -12px;">λ</i>
+            </div>
+            <div class="sd-card-band"></div>
+            <div class="sd-card-copy">
+              <div class="sd-card-name">
+                <span>Study-En · TranTech Talk</span>
+                <span class="sd-card-arrow">→</span>
+              </div>
+              <p class="sd-card-desc">
+                Luyện phản xạ tiếng Anh chuyên sâu cho dân Tech: AI Partner, Shadowing kịch bản Call Solution, Speech Lab.
+              </p>
             </div>
           </div>
-        </div>
+        </a>
 
-        <div class="sd-card-content">
-          <div class="sd-card-tag">
-            <span>Multimodal AI · Lịch Trình Du Lịch · Maps</span>
-          </div>
-          <div class="sd-card-name">
-            <span>Đi Đâu AI</span>
-            <span class="sd-card-arrow">→</span>
-          </div>
-          <p class="sd-card-desc">
-            Trích xuất thông minh từ ảnh chụp màn hình review (TikTok/FB/Insta), tối ưu hóa lộ trình di chuyển theo bản đồ và đồng bộ 1-click Google Calendar.
-          </p>
-
-          <div class="sd-card-pills">
-            <span class="sd-pill">📸 Multimodal Inbox</span>
-            <span class="sd-pill">🗺️ Route Optimizer</span>
-            <span class="sd-pill">🔄 Replan My Day</span>
-          </div>
-        </div>
-      </a>
-
-      <!-- ===================================================================
-           CARD 3: STUDY CERTIFICATE
-           =================================================================== -->
-      <a class="sd-card" 
-         href="https://huyentran1306.github.io/study-certificate/" 
-         target="_blank"
-         style="--accent: #0284c7; --accent-bg: #f0f9ff;"
-         onclick="handleCardClick(event, 'https://huyentran1306.github.io/study-certificate/', 'Study Certificate', 'Đang nạp ngân hàng đề thi chứng chỉ quốc tế Azure & AI...', '🎓', '#0284c7')">
-        
-        <div class="sd-card-stage">
-          <span class="sd-card-band"></span>
-          <span class="sd-card-shade"></span>
-          <span class="sd-card-grain"></span>
-
-          <!-- FLOATING ACADEMIC STARS & CRYSTALS -->
-          <span class="sd-fx" aria-hidden="true">
-            <i style="--x: 18%; --s: 14px; --d: 7.2s; --delay: -1.4s; --sw: 12px;">🎓</i>
-            <i style="--x: 42%; --s: 15px; --d: 8.4s; --delay: -3.8s; --sw: -14px;">★</i>
-            <i style="--x: 62%; --s: 13px; --d: 6.7s; --delay: -2.1s; --sw: 16px;">🛡️</i>
-            <i style="--x: 82%; --s: 16px; --d: 7.8s; --delay: -4.5s; --sw: -10px;">✦</i>
-            <i style="--x: 92%; --s: 12px; --d: 8.9s; --delay: -0.5s; --sw: 14px;">☁️</i>
-          </span>
-
-          <div class="sd-stage-center">
-            <div class="sd-icon-badge">
-              <span>🎓</span>
-              <div class="sd-icon-glow"></div>
+        <!-- CARD 2: ĐI ĐÂU AI (TRAVEL PLANNER) -->
+        <a class="sd-card" 
+           href="https://di-dau-ai.trann46698.workers.dev" 
+           target="_blank"
+           style="--accent: #ea580c;"
+           onclick="handleCardClick(event, 'https://di-dau-ai.trann46698.workers.dev', 'Đi Đâu AI', 'Đang kết nối Cloudflare Workers AI & Trợ lý du lịch...', '✈️', '#ea580c')">
+          <div class="sd-card-stage">
+            <video class="sd-card-video" autoplay muted loop playsinline preload="auto" src="./media/travel.mp4"></video>
+            <div class="sd-card-shade"></div>
+            <div class="sd-fx sd-fx-sakura" aria-hidden="true">
+              <i style="--x: 14%; --s: 18px; --d: 7.2s; --delay: -1.0s; --sw: 20px;"></i>
+              <i style="--x: 38%; --s: 15px; --d: 8.5s; --delay: -3.2s; --sw: -18px;"></i>
+              <i style="--x: 62%; --s: 19px; --d: 6.8s; --delay: -2.1s; --sw: 22px;"></i>
+              <i style="--x: 85%; --s: 16px; --d: 9.1s; --delay: -4.4s; --sw: -16px;"></i>
+            </div>
+            <div class="sd-card-band"></div>
+            <div class="sd-card-copy">
+              <div class="sd-card-name">
+                <span>Đi Đâu AI · Trợ Lý Lịch Trình</span>
+                <span class="sd-card-arrow">→</span>
+              </div>
+              <p class="sd-card-desc">
+                Trích xuất lịch trình thông minh từ ảnh chụp review, tối ưu tuyến đường bản đồ và đồng bộ lịch trình du lịch.
+              </p>
             </div>
           </div>
-        </div>
+        </a>
 
-        <div class="sd-card-content">
-          <div class="sd-card-tag">
-            <span>Microsoft Azure · AI Exams · Mock Tests</span>
-          </div>
-          <div class="sd-card-name">
-            <span>Study Certificate</span>
-            <span class="sd-card-arrow">→</span>
-          </div>
-          <p class="sd-card-desc">
-            Ngân hàng câu hỏi trắc nghiệm & đề thi thử thực chiến chứng chỉ Microsoft Azure & AI (AI-900, AZ-104, AZ-204, AZ-305) kèm giải thích chi tiết.
-          </p>
-
-          <div class="sd-card-pills">
-            <span class="sd-pill">📜 15+ Chứng Chỉ</span>
-            <span class="sd-pill">⏱️ Thi Thử Bấm Giờ</span>
-            <span class="sd-pill">📊 Theo Dõi Tiến Độ</span>
-          </div>
-        </div>
-      </a>
-
-      <!-- ===================================================================
-           CARD 4: PORTFOLIO - NGUYỄN THỊ HUYỀN TRÂN
-           =================================================================== -->
-      <a class="sd-card" 
-         href="https://portfolio-nth.trann46698.workers.dev/huyen-tran" 
-         target="_blank"
-         style="--accent: #9333ea; --accent-bg: #faf5ff;"
-         onclick="handleCardClick(event, 'https://portfolio-nth.trann46698.workers.dev/huyen-tran', 'Huyền Trân Portfolio', 'Đang nạp Hồ sơ năng lực Tech Lead & Dự án công nghệ...', '👩‍💻', '#9333ea')">
-        
-        <div class="sd-card-stage">
-          <span class="sd-card-band"></span>
-          <span class="sd-card-shade"></span>
-          <span class="sd-card-grain"></span>
-
-          <!-- FLOATING TECH & STAR EMBERS -->
-          <span class="sd-fx" aria-hidden="true">
-            <i style="--x: 14%; --s: 14px; --d: 7.0s; --delay: -1.0s; --sw: 14px;">👩‍💻</i>
-            <i style="--x: 36%; --s: 15px; --d: 8.2s; --delay: -3.0s; --sw: -16px;">⚡</i>
-            <i style="--x: 60%; --s: 12px; --d: 6.8s; --delay: -2.4s; --sw: 14px;">💼</i>
-            <i style="--x: 80%; --s: 16px; --d: 7.5s; --delay: -4.2s; --sw: -12px;">✦</i>
-            <i style="--x: 92%; --s: 13px; --d: 8.6s; --delay: -0.8s; --sw: 16px;">🌟</i>
-          </span>
-
-          <div class="sd-stage-center">
-            <div class="sd-icon-badge">
-              <span>👩‍💻</span>
-              <div class="sd-icon-glow"></div>
+        <!-- CARD 3: STUDY CERTIFICATE -->
+        <a class="sd-card" 
+           href="https://huyentran1306.github.io/study-certificate/" 
+           target="_blank"
+           style="--accent: #0284c7;"
+           onclick="handleCardClick(event, 'https://huyentran1306.github.io/study-certificate/', 'Study Certificate', 'Đang nạp ngân hàng đề thi chứng chỉ quốc tế Azure & AI...', '🎓', '#0284c7')">
+          <div class="sd-card-stage">
+            <video class="sd-card-video" autoplay muted loop playsinline preload="auto" src="./media/certs.mp4"></video>
+            <div class="sd-card-shade"></div>
+            <div class="sd-fx sd-fx-glyphs" aria-hidden="true">
+              <i style="--x: 15%; --s: 15px; --d: 7.0s; --delay: -1.2s; --sw: 14px;">🎓</i>
+              <i style="--x: 40%; --s: 16px; --d: 8.4s; --delay: -3.0s; --sw: -16px;">★</i>
+              <i style="--x: 65%; --s: 14px; --d: 6.6s; --delay: -2.2s; --sw: 18px;">🛡️</i>
+              <i style="--x: 86%; --s: 15px; --d: 7.8s; --delay: -4.5s; --sw: -12px;">☁️</i>
+            </div>
+            <div class="sd-card-band"></div>
+            <div class="sd-card-copy">
+              <div class="sd-card-name">
+                <span>Study Certificate · Azure & AI</span>
+                <span class="sd-card-arrow">→</span>
+              </div>
+              <p class="sd-card-desc">
+                Ngân hàng câu hỏi trắc nghiệm & đề thi thử bấm giờ chứng chỉ quốc tế Microsoft Azure, AI & ISTQB.
+              </p>
             </div>
           </div>
-        </div>
+        </a>
 
-        <div class="sd-card-content">
-          <div class="sd-card-tag">
-            <span>Tech Lead · Cloud Architect · Showcase</span>
-          </div>
-          <div class="sd-card-name">
-            <span>Huyền Trân Portfolio</span>
-            <span class="sd-card-arrow">→</span>
-          </div>
-          <p class="sd-card-desc">
-            Hồ sơ năng lực, kinh nghiệm Tech Lead / Senior .NET Developer, hệ thống kiến trúc Cloudflare Edge & AI và các dự án công nghệ tiêu biểu.
-          </p>
-
-          <div class="sd-card-pills">
-            <span class="sd-pill">💼 Tech Lead Journey</span>
-            <span class="sd-pill">⚡ Cloud & AI Systems</span>
-            <span class="sd-pill">🌟 Profile & Projects</span>
-          </div>
-        </div>
-      </a>
-
-      <!-- ===================================================================
-           CARD 5: TRAVEL EXPENSE SPLITTER (QUYẾT TOÁN DU LỊCH)
-           =================================================================== -->
-      <a class="sd-card" 
-         href="https://huyentran1306.github.io/Travel/" 
-         target="_blank"
-         style="--accent: #059669; --accent-bg: #ecfdf5;"
-         onclick="handleCardClick(event, 'https://huyentran1306.github.io/Travel/', 'Quyết Toán Du Lịch', 'Đang nạp Sổ tay quản lý quỹ & chia tiền du lịch công bằng...', '🌴', '#059669')">
-        
-        <div class="sd-card-stage">
-          <span class="sd-card-band"></span>
-          <span class="sd-card-shade"></span>
-          <span class="sd-card-grain"></span>
-
-          <!-- FLOATING TRAVEL FUNDS & PALM PARTICLES -->
-          <span class="sd-fx" aria-hidden="true">
-            <i style="--x: 12%; --s: 15px; --d: 6.8s; --delay: -0.6s; --sw: 16px;">🌴</i>
-            <i style="--x: 34%; --s: 14px; --d: 8.0s; --delay: -2.8s; --sw: -14px;">💸</i>
-            <i style="--x: 58%; --s: 13px; --d: 7.2s; --delay: -1.9s; --sw: 15px;">💰</i>
-            <i style="--x: 78%; --s: 16px; --d: 8.8s; --delay: -4.5s; --sw: -12px;">🏖️</i>
-            <i style="--x: 90%; --s: 13px; --d: 6.5s; --delay: -0.9s; --sw: 14px;">✦</i>
-          </span>
-
-          <div class="sd-stage-center">
-            <div class="sd-icon-badge">
-              <span>🌴</span>
-              <div class="sd-icon-glow"></div>
+        <!-- CARD 4: PORTFOLIO HUYỀN TRÂN -->
+        <a class="sd-card" 
+           href="https://portfolio-nth.trann46698.workers.dev/huyen-tran" 
+           target="_blank"
+           style="--accent: #8b5cf6;"
+           onclick="handleCardClick(event, 'https://portfolio-nth.trann46698.workers.dev/huyen-tran', 'Huyền Trân Portfolio', 'Đang nạp Hồ sơ năng lực Tech Lead & Dự án công nghệ...', '👩‍💻', '#8b5cf6')">
+          <div class="sd-card-stage">
+            <video class="sd-card-video" autoplay muted loop playsinline preload="auto" src="./media/portfolio.mp4"></video>
+            <div class="sd-card-shade"></div>
+            <div class="sd-fx sd-fx-glyphs" aria-hidden="true">
+              <i style="--x: 15%; --s: 14px; --d: 7.0s; --delay: -1.0s; --sw: 14px;">👩‍💻</i>
+              <i style="--x: 38%; --s: 15px; --d: 8.2s; --delay: -3.0s; --sw: -16px;">⚡</i>
+              <i style="--x: 62%; --s: 13px; --d: 6.8s; --delay: -2.4s; --sw: 14px;">💼</i>
+              <i style="--x: 85%; --s: 16px; --d: 7.5s; --delay: -4.2s; --sw: -12px;">🌟</i>
+            </div>
+            <div class="sd-card-band"></div>
+            <div class="sd-card-copy">
+              <div class="sd-card-name">
+                <span>Huyền Trân Portfolio</span>
+                <span class="sd-card-arrow">→</span>
+              </div>
+              <p class="sd-card-desc">
+                Hồ sơ năng lực, kinh nghiệm Tech Lead / Senior .NET Developer, hệ thống Cloudflare Edge & AI tiêu biểu.
+              </p>
             </div>
           </div>
-        </div>
+        </a>
 
-        <div class="sd-card-content">
-          <div class="sd-card-tag">
-            <span>Chi Tiêu Nhóm · Quyết Toán Quỹ · Du Lịch</span>
+        <!-- CARD 5: QUYẾT TOÁN DU LỊCH -->
+        <a class="sd-card" 
+           href="https://huyentran1306.github.io/Travel/" 
+           target="_blank"
+           style="--accent: #059669;"
+           onclick="handleCardClick(event, 'https://huyentran1306.github.io/Travel/', 'Quyết Toán Du Lịch', 'Đang nạp Sổ tay quản lý quỹ & chia tiền du lịch công bằng...', '🌴', '#059669')">
+          <div class="sd-card-stage">
+            <video class="sd-card-video" autoplay muted loop playsinline preload="auto" src="./media/expense.mp4"></video>
+            <div class="sd-card-shade"></div>
+            <div class="sd-fx sd-fx-embers" aria-hidden="true">
+              <i style="--x: 12%; --s: 15px; --d: 6.8s; --delay: -0.6s; --sw: 16px;"></i>
+              <i style="--x: 36%; --s: 14px; --d: 8.0s; --delay: -2.8s; --sw: -14px;"></i>
+              <i style="--x: 60%; --s: 13px; --d: 7.2s; --delay: -1.9s; --sw: 15px;"></i>
+              <i style="--x: 82%; --s: 16px; --d: 8.8s; --delay: -4.5s; --sw: -12px;"></i>
+            </div>
+            <div class="sd-card-band"></div>
+            <div class="sd-card-copy">
+              <div class="sd-card-name">
+                <span>Quyết Toán Du Lịch</span>
+                <span class="sd-card-arrow">→</span>
+              </div>
+              <p class="sd-card-desc">
+                Sổ thu chi & chia tiền nhóm công bằng: ghi nhận hóa đơn, tiếp tế quỹ đồng loạt và dự toán ngân sách chuyến đi.
+              </p>
+            </div>
           </div>
-          <div class="sd-card-name">
-            <span>Quyết Toán Du Lịch</span>
-            <span class="sd-card-arrow">→</span>
-          </div>
-          <p class="sd-card-desc">
-            Sổ thu chi & chia tiền du lịch công bằng: ghi nhận hóa đơn chi tiêu nhóm, tiếp tế quỹ đồng loạt, dự toán ngân sách và tính toán số dư từng thành viên.
-          </p>
+        </a>
 
-          <div class="sd-card-pills">
-            <span class="sd-pill">💸 Chia Tiền Công Bằng</span>
-            <span class="sd-pill">💰 Tiếp Tế Quỹ Nhanh</span>
-            <span class="sd-pill">📝 Dự Toán Chuyến Đi</span>
-          </div>
-        </div>
-      </a>
+      </section>
 
-
-
-    </section>
-
-
+    </div>
   </main>
 
-  <!-- =========================================================================
-       APP LOADER OVERLAY
-       ========================================================================= -->
+  <!-- APP LOADER TRANSITION OVERLAY -->
   <div class="app-loader" id="appLoader" role="status" aria-label="Đang chuyển hướng">
     <div class="app-loader-circle" id="loaderCircle">
       <span id="loaderEmoji">✨</span>
     </div>
     <div class="app-loader-title" id="loaderTitle">Đang mở ứng dụng...</div>
-    <p class="app-loader-msg" id="loaderMsg">Đợi một xíu nha! ♡</p>
+    <p class="app-loader-msg" id="loaderMsg">Đợi Trân một xíu nha! ♡</p>
   </div>
 
-  <!-- =========================================================================
-       FLOATING FEEDBACK / INFO WIDGET
-       ========================================================================= -->
-  <div class="dw-root">
-    <div class="dw-frame" id="dwFrame" onclick="toggleWidget(true)">
-      <!-- MINI PILL -->
-      <div class="dw-mini">
-        <span>💬</span>
-        <span>Nhắn cho Trân</span>
-        <span style="opacity: 0.5;">›</span>
+  <!-- FLOATING WIDGET ("Nhắn tin cho Trân") -->
+  <aside class="dw-root">
+    <div class="dw-frame" id="dwFrame">
+      <div class="dw-pill-bar" onclick="toggleWidget(true)">
+        <div class="dw-avatar">💌</div>
+        <span class="dw-label">Nhắn cho Trân</span>
+        <span class="dw-status-dot"></span>
       </div>
 
-      <!-- FULL EXPANDED DIALOG -->
-      <div class="dw-full" onclick="event.stopPropagation()">
-        <button type="button" class="dw-close" onclick="toggleWidget(false)" aria-label="Đóng">×</button>
-        <div class="dw-widget-title">Huyền Trân's Studio ✨</div>
-        <div class="dw-widget-subtitle">Study-En · Đi Đâu AI · Study Certificate</div>
+      <div class="dw-expanded-body">
+        <button type="button" class="dw-close-btn" onclick="toggleWidget(false)" aria-label="Đóng">✕</button>
 
         <div class="dw-tabs">
-          <button type="button" class="dw-tab-btn active" id="tabBtn1" onclick="switchTab(1)">💬 Góp ý</button>
+          <button type="button" class="dw-tab-btn active" id="tabBtn1" onclick="switchTab(1)">Góp ý / Nhắn gửi</button>
           <button type="button" class="dw-tab-btn" id="tabBtn2" onclick="switchTab(2)">🌸 Giới thiệu</button>
         </div>
 
@@ -1363,11 +1020,9 @@
         </div>
       </div>
     </div>
-  </div>
+  </aside>
 
-  <!-- JAVASCRIPT LOGIC -->
   <script>
-
     // 0. INITIAL PAGE PRELOADER SEQUENCE
     const preloaderStatusTexts = [
       "Đang nạp không gian tri thức...",
@@ -1378,7 +1033,6 @@
     const barEl = document.getElementById("preloaderBar");
     const preloaderEl = document.getElementById("pagePreloader");
 
-    // Animate progress smoothly
     setTimeout(() => { if (barEl) barEl.style.width = "45%"; }, 120);
     setTimeout(() => { 
       if (barEl) barEl.style.width = "82%"; 
@@ -1395,14 +1049,13 @@
         setTimeout(() => { preloaderEl.style.display = "none"; }, 650);
       }
     };
-
     window.addEventListener("load", () => setTimeout(dismissPreloader, 900));
-    setTimeout(dismissPreloader, 1300); // Fail-safe fallback
+    setTimeout(dismissPreloader, 1300);
 
     // 1. MASCOT TYPEWRITER ANIMATION
     const speechLines = [
       "Xin chào, mình là Huyền Trân! ✨",
-      "Hôm nay bạn muốn xem Portfolio, luyện tiếng Anh, ôn chứng chỉ hay lên lịch vi vu? 🌸",
+      "Hôm nay bạn muốn luyện tiếng Anh, lên lịch vi vu hay thi chứng chỉ nha? 🌸",
       "Mỗi bước tiến nhỏ hôm nay đều đưa bạn đến gần hơn với phiên bản rực rỡ nhất! 🚀",
       "Không ngừng tích lũy tri thức, để tự do làm chủ công nghệ và tương lai! 💖"
     ];
@@ -1421,18 +1074,18 @@
 
         if (currentCharIndex === fullText.length) {
           isDeleting = true;
-          setTimeout(typeMascot, 2600); // Wait after full phrase
+          setTimeout(typeMascot, 2600);
           return;
         }
         setTimeout(typeMascot, 55);
       } else {
-        mascotTextEl.textContent = fullText.slice(0, currentCharIndex - 1);
+        mascotTextEl.textContent = fullText.slice(0, currentCharIndex);
         currentCharIndex--;
 
         if (currentCharIndex === 0) {
           isDeleting = false;
           currentLineIndex = (currentLineIndex + 1) % speechLines.length;
-          setTimeout(typeMascot, 450); // Pause before next sentence
+          setTimeout(typeMascot, 600);
           return;
         }
         setTimeout(typeMascot, 25);
@@ -1444,7 +1097,6 @@
     function handleCardClick(event, url, title, msg, emoji, accent) {
       if (event) event.preventDefault();
       
-      // Resolve exact target URL from parameter or anchor href
       let targetUrl = url;
       if (!targetUrl || !targetUrl.startsWith("http")) {
         if (event && event.currentTarget && event.currentTarget.href && event.currentTarget.href.startsWith("http")) {
@@ -1464,15 +1116,14 @@
         loader.style.setProperty("--loader-accent", accent || "#4f46e5");
         if (loaderEmoji) loaderEmoji.textContent = emoji || "✨";
         if (loaderTitle) loaderTitle.textContent = `Đang mở ${title}...`;
-        if (loaderMsg) loaderMsg.textContent = msg || "Đợi một xíu nha! ♡";
+        if (loaderMsg) loaderMsg.textContent = msg || "Đợi Trân một xíu nha! ♡";
         loader.classList.add("active");
       }
 
-      // Smooth transition delay before opening
       setTimeout(() => {
         window.open(targetUrl, "_blank");
         if (loader) loader.classList.remove("active");
-      }, 650);
+      }, 700);
     }
 
     // 3. FLOATING WIDGET TOGGLE & TABS
@@ -1492,7 +1143,7 @@
       document.getElementById("tabPanel2").classList.toggle("active", tabIndex === 2);
     }
 
-    // Supabase Client for Cloud Feedback
+    // 4. SUPABASE CLOUD FEEDBACK
     const SUPABASE_URL = 'https://cfiifhfruyjcgikjotne.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_DD6l7mKVEkHXIEG-1r7KDg_CbrfVdWA';
     const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
@@ -1548,7 +1199,6 @@
       }
     }
 
-    // Close widget on Escape key
     window.addEventListener("keydown", (e) => {
       if (e.key === "Escape") toggleWidget(false);
     });
