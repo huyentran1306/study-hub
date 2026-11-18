@@ -288,6 +288,36 @@
       transform: scale(1.08);
     }
 
+    /* Card chưa có video riêng: dùng emoji lớn trên nền màu accent */
+    .sd-card-art {
+      z-index: 0;
+      position: absolute;
+      inset: 0 0 30% 0;
+      display: grid;
+      place-items: center;
+      font-size: clamp(56px, 30cqi, 120px);
+      line-height: 1;
+      filter: drop-shadow(0 18px 24px color-mix(in srgb, var(--accent) 35%, transparent));
+      animation: sdArtFloat 5.5s ease-in-out infinite;
+      transition: transform .6s cubic-bezier(.16, 1, .3, 1);
+    }
+    .sd-card:hover .sd-card-art {
+      transform: scale(1.08) rotate(-4deg);
+    }
+    .sd-card-stage.is-art .sd-card-shade {
+      mix-blend-mode: normal;
+      background: radial-gradient(circle at 50% 38%, color-mix(in srgb, var(--accent) 26%, #fff) 0, transparent 62%),
+                  radial-gradient(circle at 84% 12%, color-mix(in srgb, var(--accent) 18%, #fff) 0, transparent 55%),
+                  linear-gradient(180deg, #f1eef8 0%, #f9f1f3 55%, #fcf5ee 100%);
+    }
+    @keyframes sdArtFloat {
+      0%, 100% { translate: 0 0; }
+      50% { translate: 0 -10px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .sd-card-art { animation: none; }
+    }
+
     .sd-card-shade {
       z-index: -1;
       mix-blend-mode: multiply;
@@ -825,7 +855,7 @@
         </div>
       </header>
 
-      <!-- 5 HERO APP CARDS GRID -->
+      <!-- 10 HERO APP CARDS GRID -->
       <section class="sd-grid">
 
         <!-- CARD 1: STUDY-EN (TECH LEAD ENGLISH) -->
@@ -858,10 +888,10 @@
 
         <!-- CARD 2: ĐI ĐÂU AI (TRAVEL PLANNER) -->
         <a class="sd-card" 
-           href="https://di-dau-ai.trann46698.workers.dev" 
+           href="https://di-dau-ai.trannth1306.workers.dev/" 
            target="_blank"
            style="--accent: #ea580c;"
-           onclick="handleCardClick(event, 'https://di-dau-ai.trann46698.workers.dev', 'Đi Đâu AI', 'Đang kết nối Cloudflare Workers AI & Trợ lý du lịch...', '✈️', '#ea580c')">
+           onclick="handleCardClick(event, 'https://di-dau-ai.trannth1306.workers.dev/', 'Đi Đâu AI', 'Đang kết nối Cloudflare Workers AI & Trợ lý du lịch...', '✈️', '#ea580c')">
           <div class="sd-card-stage">
             <video class="sd-card-video" autoplay muted loop playsinline preload="auto" src="./media/travel.mp4"></video>
             <div class="sd-card-shade"></div>
@@ -963,6 +993,146 @@
               </div>
               <p class="sd-card-desc">
                 Sổ thu chi & chia tiền nhóm công bằng: ghi nhận hóa đơn, tiếp tế quỹ đồng loạt và dự toán ngân sách chuyến đi.
+              </p>
+            </div>
+          </div>
+        </a>
+
+        <!-- CARD 6: CHIT CHAT ISLAND -->
+        <a class="sd-card" 
+           href="https://study-en.trannth1306.workers.dev/island" 
+           target="_blank"
+           style="--accent: #0d9488;"
+           onclick="handleCardClick(event, 'https://study-en.trannth1306.workers.dev/island', 'Chit Chat Island · Đảo Tám Chuyện', 'Đang ghé đảo, chuẩn bị luyện nói tiếng Anh giao tiếp...', '🏝️', '#0d9488')">
+          <div class="sd-card-stage is-art">
+            <div class="sd-card-shade"></div>
+            <div class="sd-card-art" aria-hidden="true">🏝️</div>
+            <div class="sd-fx sd-fx-glyphs" aria-hidden="true">
+              <i style="--x: 12%; --s: 14px; --d: 6.8s; --delay: -1.2s; --sw: 16px;">💬</i>
+              <i style="--x: 36%; --s: 15px; --d: 8.2s; --delay: -3.4s; --sw: -14px;">🐚</i>
+              <i style="--x: 60%; --s: 13px; --d: 7.1s; --delay: -2.0s; --sw: 18px;">🌊</i>
+              <i style="--x: 83%; --s: 15px; --d: 8.9s; --delay: -4.8s; --sw: -12px;">🦀</i>
+            </div>
+            <div class="sd-card-band"></div>
+            <div class="sd-card-copy">
+              <div class="sd-card-name">
+                <span>Chit Chat Island · Đảo Tám Chuyện</span>
+                <span class="sd-card-arrow">→</span>
+              </div>
+              <p class="sd-card-desc">
+                Game luyện tiếng Anh giao tiếp 3 tháng từ A1 lên B1: tám chuyện với dân đảo, sổ lỗi sai và nước rút 30 ngày.
+              </p>
+            </div>
+          </div>
+        </a>
+
+        <!-- CARD 7: PLAYFORGE -->
+        <a class="sd-card" 
+           href="https://playforge.trannth1306.workers.dev/" 
+           target="_blank"
+           style="--accent: #16a34a;"
+           onclick="handleCardClick(event, 'https://playforge.trannth1306.workers.dev/', 'PlayForge · Xưởng luyện Automation', 'Đang mở xưởng Playwright & IDE chạy test trên trình duyệt...', '🎭', '#16a34a')">
+          <div class="sd-card-stage is-art">
+            <div class="sd-card-shade"></div>
+            <div class="sd-card-art" aria-hidden="true">🎭</div>
+            <div class="sd-fx sd-fx-glyphs" aria-hidden="true">
+              <i style="--x: 12%; --s: 14px; --d: 6.8s; --delay: -1.2s; --sw: 16px;">▶</i>
+              <i style="--x: 36%; --s: 15px; --d: 8.2s; --delay: -3.4s; --sw: -14px;">✓</i>
+              <i style="--x: 60%; --s: 13px; --d: 7.1s; --delay: -2.0s; --sw: 18px;"></></i>
+              <i style="--x: 83%; --s: 15px; --d: 8.9s; --delay: -4.8s; --sw: -12px;">⚙️</i>
+            </div>
+            <div class="sd-card-band"></div>
+            <div class="sd-card-copy">
+              <div class="sd-card-name">
+                <span>PlayForge · Xưởng luyện Automation</span>
+                <span class="sd-card-arrow">→</span>
+              </div>
+              <p class="sd-card-desc">
+                Học Playwright với JavaScript/TypeScript theo lộ trình 16 tuần: thử thách chấm tự động, IDE chạy test ngay trên trình duyệt.
+              </p>
+            </div>
+          </div>
+        </a>
+
+        <!-- CARD 8: CERT ATLAS -->
+        <a class="sd-card" 
+           href="https://knowledge-certificate.trannth1306.workers.dev/" 
+           target="_blank"
+           style="--accent: #2563eb;"
+           onclick="handleCardClick(event, 'https://knowledge-certificate.trannth1306.workers.dev/', 'Cert Atlas · Sổ tay chứng chỉ', 'Đang mở sổ tay kiến thức sau mỗi chứng chỉ...', '🗺️', '#2563eb')">
+          <div class="sd-card-stage is-art">
+            <div class="sd-card-shade"></div>
+            <div class="sd-card-art" aria-hidden="true">🗺️</div>
+            <div class="sd-fx sd-fx-glyphs" aria-hidden="true">
+              <i style="--x: 12%; --s: 14px; --d: 6.8s; --delay: -1.2s; --sw: 16px;">📘</i>
+              <i style="--x: 36%; --s: 15px; --d: 8.2s; --delay: -3.4s; --sw: -14px;">🧭</i>
+              <i style="--x: 60%; --s: 13px; --d: 7.1s; --delay: -2.0s; --sw: 18px;">★</i>
+              <i style="--x: 83%; --s: 15px; --d: 8.9s; --delay: -4.8s; --sw: -12px;">☁️</i>
+            </div>
+            <div class="sd-card-band"></div>
+            <div class="sd-card-copy">
+              <div class="sd-card-name">
+                <span>Cert Atlas · Sổ tay chứng chỉ</span>
+                <span class="sd-card-arrow">→</span>
+              </div>
+              <p class="sd-card-desc">
+                Sổ tay kiến thức sau mỗi chứng chỉ: tóm tắt, sơ đồ kiến trúc, cây quyết định, bẫy đề thi và chế độ ôn tập.
+              </p>
+            </div>
+          </div>
+        </a>
+
+        <!-- CARD 9: AI CHO TESTER -->
+        <a class="sd-card" 
+           href="https://huyentran1306.github.io/ai-study-qc/" 
+           target="_blank"
+           style="--accent: #db2777;"
+           onclick="handleCardClick(event, 'https://huyentran1306.github.io/ai-study-qc/', 'Lộ trình học AI cho Tester', 'Đang nạp lộ trình 6 chặng học AI cho Tester...', '🧠', '#db2777')">
+          <div class="sd-card-stage is-art">
+            <div class="sd-card-shade"></div>
+            <div class="sd-card-art" aria-hidden="true">🧠</div>
+            <div class="sd-fx sd-fx-glyphs" aria-hidden="true">
+              <i style="--x: 12%; --s: 14px; --d: 6.8s; --delay: -1.2s; --sw: 16px;">🤖</i>
+              <i style="--x: 36%; --s: 15px; --d: 8.2s; --delay: -3.4s; --sw: -14px;">🧪</i>
+              <i style="--x: 60%; --s: 13px; --d: 7.1s; --delay: -2.0s; --sw: 18px;">✨</i>
+              <i style="--x: 83%; --s: 15px; --d: 8.9s; --delay: -4.8s; --sw: -12px;">🐞</i>
+            </div>
+            <div class="sd-card-band"></div>
+            <div class="sd-card-copy">
+              <div class="sd-card-name">
+                <span>Lộ trình học AI cho Tester</span>
+                <span class="sd-card-arrow">→</span>
+              </div>
+              <p class="sd-card-desc">
+                Lộ trình 6 chặng từ con số 0 đến test được sản phẩm có AI, mỗi chặng có bài thực hành và câu tự kiểm tra.
+              </p>
+            </div>
+          </div>
+        </a>
+
+        <!-- CARD 10: KÈM CON HỌC -->
+        <a class="sd-card" 
+           href="https://kem-con-hoc-5xf.pages.dev/" 
+           target="_blank"
+           style="--accent: #f59e0b;"
+           onclick="handleCardClick(event, 'https://kem-con-hoc-5xf.pages.dev/', 'Kèm Con Học', 'Đang mở góc học cùng con...', '🧸', '#f59e0b')">
+          <div class="sd-card-stage is-art">
+            <div class="sd-card-shade"></div>
+            <div class="sd-card-art" aria-hidden="true">🧸</div>
+            <div class="sd-fx sd-fx-sakura" aria-hidden="true">
+              <i style="--x: 12%; --s: 14px; --d: 6.8s; --delay: -1.2s; --sw: 16px;"></i>
+              <i style="--x: 36%; --s: 15px; --d: 8.2s; --delay: -3.4s; --sw: -14px;"></i>
+              <i style="--x: 60%; --s: 13px; --d: 7.1s; --delay: -2.0s; --sw: 18px;"></i>
+              <i style="--x: 83%; --s: 15px; --d: 8.9s; --delay: -4.8s; --sw: -12px;"></i>
+            </div>
+            <div class="sd-card-band"></div>
+            <div class="sd-card-copy">
+              <div class="sd-card-name">
+                <span>Kèm Con Học</span>
+                <span class="sd-card-arrow">→</span>
+              </div>
+              <p class="sd-card-desc">
+                Bạn đồng hành dịu dàng của bố mẹ khi kèm con học tại nhà: AI giải thích bài từng bước theo cách trẻ dễ hiểu.
               </p>
             </div>
           </div>

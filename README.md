@@ -11,7 +11,7 @@
 * **Công nghệ**: Next.js, Cloudflare Edge AI, Meta Llama 3.3 70B Fast, Deepgram Aura-2 TTS, OpenAI Whisper STT.
 * **Tính năng**: Sửa câu và nâng cấp văn phong kỹ thuật, nhập vai phỏng vấn kiến trúc giải pháp với AI, luyện phát âm bản xứ.
 
-### 2. ✈️ [Đi Đâu AI](https://di-dau-ai.trann46698.workers.dev)
+### 2. ✈️ [Đi Đâu AI](https://di-dau-ai.trannth1306.workers.dev/)
 * **Chủ đề**: Trợ lý AI lập lịch trình du lịch thông minh cho người Việt.
 * **Công nghệ**: Cloudflare Workers Serverless, Gemini Multimodal AI, Google Maps API, iCal Sync.
 * **Tính năng**: Bóc tách ảnh chụp màn hình review từ TikTok/Instagram/Facebook, tối ưu chuỗi lộ trình di chuyển, xử lý dời giờ thông minh (Replan My Day).
@@ -20,6 +20,16 @@
 * **Chủ đề**: Ngân hàng đề thi & luyện thi chứng chỉ quốc tế Microsoft Azure & AI.
 * **Công nghệ**: React, Supabase, Tailwind CSS, Motion.
 * **Tính năng**: Hơn 15+ chứng chỉ (AI-900, AZ-104, AZ-204, AZ-305...), chế độ thi thử bấm giờ thực chiến, flashcards và theo dõi tiến độ học tập.
+
+---
+
+## 🆕 Ứng Dụng Mới
+
+* 🏝️ [Chit Chat Island · Đảo Tám Chuyện](https://study-en.trannth1306.workers.dev/island) — game luyện tiếng Anh giao tiếp 3 tháng từ A1 lên B1.
+* 🎭 [PlayForge · Xưởng luyện Automation](https://playforge.trannth1306.workers.dev/) — học Playwright với JS/TS theo lộ trình 16 tuần.
+* 🗺️ [Cert Atlas · Sổ tay chứng chỉ](https://knowledge-certificate.trannth1306.workers.dev/) — sổ tay kiến thức sau mỗi chứng chỉ.
+* 🧠 [Lộ trình học AI cho Tester](https://huyentran1306.github.io/ai-study-qc/) — 6 chặng từ con số 0 đến test được sản phẩm có AI.
+* 🧸 [Kèm Con Học](https://kem-con-hoc-5xf.pages.dev/) — bạn đồng hành của bố mẹ khi kèm con học tại nhà.
 
 ---
 
